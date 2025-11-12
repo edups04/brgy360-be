@@ -1,0 +1,103 @@
+@port = 8080
+@baseUrl = http://localhost:{{port}}/api
+
+### * Get All Users (WITH PAGINATIONS AND SOME FILTER FOR role status sex barangayId)
+GET {{baseUrl}}/users?page=1&limit=10&status=pending&sex=male&role=user&barangayId=681f5663bc1cafa5099611e3
+
+### * Get All Users (WITH PAGINATIONS AND SOME FILTER FOR role status sex barangayId)
+GET {{baseUrl}}/users?search=validation&barangayId=6829378cd9e090ec146c3a65&page=undefined&limit=undefined&status=undefined&role=undefined
+
+### * Get User by ID
+GET {{baseUrl}}/users/682a10ebf6153e49e2ada124
+
+### * Register User
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "firstName": "Juan",
+  "lastName": "Dela Cruz",
+  "sex": "Male",  
+  "birthdate": "2000-05-15",
+  "age": 24,
+  "email": "test3",
+  "phoneNumber": "0987654321",
+  "password": "123",
+  "address": "123 North St",
+  "profile": "N/A",
+  "validId":{
+    "type": "N/A",
+    "front": "N/A",
+    "back": "N/A"
+  },
+  "role": "user",
+  "barangayId": "681f5663bc1cafa5099611e3"
+}
+
+### * Register Admin
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "firstName": "Maria",
+  "lastName": "Reyes",
+  "sex": "Female",
+  "birthdate": "1990-03-08",
+  "age": 34,
+  "email": "maria.staff@example.com",
+  "phoneNumber": "0987654321",
+  "password": "staffpass123",
+  "address": "456 East Rd",
+  "profile": "N/A",
+  "validId":{
+    "type": "N/A",
+    "front": "N/A",
+    "back": "N/A"
+  },
+  "role": "admin",
+  "barangayId": "681f5663bc1cafa5099611e3"
+}
+
+### * Login
+POST {{baseUrl}}/users/login
+Content-Type: application/json
+
+{
+  "email": "test@sample.com",
+  "password": "test"
+}
+
+### * Update User 1 FIELD
+PUT {{baseUrl}}/users/6821eee0d745a8a3c3ba5b5a
+Content-Type: application/json
+
+{
+  "password": "testpassword"
+}
+
+### * Update User
+PUT {{baseUrl}}/users/68233a20d957bbcd6e2a33c2
+Content-Type: application/json
+
+{
+  "firstName": "UPDATED",
+  "lastName": "Dela Cruz",
+  "sex": "Male",  
+  "birthdate": "2000-05-15",
+  "age": 24,
+  "email": "juan.user@example.com",
+  "phoneNumber": "0987654321",
+  "password": "123",
+  "address": "123 North St",
+  "profile": "N/A",
+  "validId":{
+    "type": "N/A",
+    "front": "N/A",
+    "back": "N/A"
+  },
+  "role": "user",
+  "barangayId": "681f5663bc1cafa5099611e3"
+}
+
+### * Delete User
+DELETE {{baseUrl}}/users/6820c73c435e30a5a6ec1c59

@@ -1,0 +1,51 @@
+@port = 8080
+@baseUrl = http://localhost:{{port}}/api
+
+### * Get All Chat Bot Messages
+GET {{baseUrl}}/chat-bot-messages?barangayId=682e32d1b985d7b0872e45d4
+
+### * Get All Chat Bot Messages for ONE USER (to see their own convo, for user)
+GET {{baseUrl}}/chat-bot-messages?userId=682e8f5ce9a7feabbada4b69
+
+### * Get All Chat Bot Messages then group it by userIds (to see convo of each user, for admin)
+GET {{baseUrl}}/chat-bot-messages?grouped=true&barangayId=682e32d1b985d7b0872e45d4
+
+### * Get Chat Bot Message by ID
+GET {{baseUrl}}/chat-bot-messages/68250a1a873fb9aea032c785
+
+### * Create New Chat Bot Message 
+# ! from: if set to "user", then this message is for the bot/ai
+# ! userId: this will be the ref to get the sender's details 
+POST {{baseUrl}}/chat-bot-messages
+Content-Type: application/json
+
+{
+  "message": "Chatbot help me :(",
+  "from": "user", 
+  "userId": "68233886d957bbcd6e2a339d"
+}
+
+### * Sample test if the bot replies
+# ! from: if set to "chatbot", then this message is for the user
+# ! userId: this will be the ref to get the recipient's details
+POST {{baseUrl}}/chat-bot-messages
+Content-Type: application/json
+
+{
+  "message": "Happy to help :)",
+  "from": "chatbot",
+  "userId": "68233886d957bbcd6e2a339d"
+}
+
+### * Update Chat Bot Message Info
+PUT {{baseUrl}}/chat-bot-messages/682930b2119c12dff040fb1f
+Content-Type: application/json
+
+{
+  "message": "Hello updated!!!!",
+  "from": "user",
+  "userId": "68231f10d957bbcd6e2a31ba"
+}
+
+### * Delete Chat Bot Message
+DELETE {{baseUrl}}/chat-bot-messages/6622e4314cbf20d84db35541

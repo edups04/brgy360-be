@@ -1,0 +1,39 @@
+@port = 8080
+@baseUrl = http://localhost:{{port}}/api
+
+### * Get All Accomplishments and Achievements WITH PAGINATIONS AND FILTER 
+# * THIS IS ALREADY ON NEWEST TO OLDEST, JUST ADJUST LIMIT FOR RECENTS DASHBOARD
+GET {{baseUrl}}/accomplishments-achievements?page=1&limit=10
+
+### *
+GET {{baseUrl}}/accomplishments-achievements?barangayId=681f5663bc1cafa5099611e3
+
+### * Get by ID
+GET {{baseUrl}}/accomplishments-achievements/682231baad7ee92d526619db
+
+### * Create New 
+POST {{baseUrl}}/accomplishments-achievements
+Content-Type: application/json
+
+{
+  "title": "Accomplishments and Achievements Title v3",
+  "date": "2025-05-17T00:00:00.000+00:00",
+  "contents": "CONTENTS HERE",
+  "image": "N/A",
+  "barangayId": "681f5663bc1cafa5099611e3"
+}
+
+### * Update Info
+PUT {{baseUrl}}/accomplishments-achievements/682935d7d9e090ec146c3a3d
+Content-Type: application/json
+
+{
+  "title": "Accomplishments and Achievements Title v4",
+  "date": "2025-05-17T00:00:00.000+00:00",
+  "contents": "CONTENTS HERE",
+  "image": "N/A",
+  "barangayId": "681f5663bc1cafa5099611e3"
+}
+
+### * Delete 
+DELETE {{baseUrl}}/accomplishments-achievements/682231baad7ee92d526619db

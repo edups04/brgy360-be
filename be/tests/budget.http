@@ -1,0 +1,40 @@
+@port = 8080
+@baseUrl = http://localhost:{{port}}/api
+
+### * Get All Budgets WITH PAGINATIONS AND FILTER 
+# * THIS IS ALREADY ON NEWEST TO OLDEST, JUST ADJUST LIMIT FOR RECENTS DASHBOARD
+GET {{baseUrl}}/budgets?page=1&limit=10&title=BUDGET FOR YEAR 2025&date=2025
+
+### * Get All Budgets based on barangay
+GET {{baseUrl}}/budgets?barangayId=681f5663bc1cafa5099611e3
+
+### * Get All Budgets
+GET {{baseUrl}}/budgets
+
+### * Get by ID
+GET {{baseUrl}}/budgets/6622e4314cbf20d84db35541
+
+### * Create New 
+POST {{baseUrl}}/budgets
+Content-Type: application/json
+
+{
+  "title": "Hehe",
+  "date": "2024",
+  "file": "N/A",
+  "barangayId": "681f5663bc1cafa5099611e3"
+}
+
+### * Update Info
+PUT {{baseUrl}}/budgets/68293225485ec5053bdbf1df
+Content-Type: application/json
+
+{
+  "title": "BUDGET FOR YEAR 2025",
+  "date": "2024",
+  "file": "N/A",
+  "barangayId": "681f5663bc1cafa5099611e3"
+}
+
+### * Delete 
+DELETE {{baseUrl}}/budgets/6820c9f2d8314abf6bb98d84
