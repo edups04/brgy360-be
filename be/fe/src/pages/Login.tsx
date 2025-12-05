@@ -12,68 +12,47 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(true);
   const navigate = useNavigate();
-
   const [showModal, setShowModal] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
 
-  // NEW: loading state
-  const [loading, setLoading] = useState(false);
-
   const onLogin = async () => {
     try {
-      setLoading(true); // start loading
-      let url = `${BACKEND_API}/users/login`;
-
-      let response = await axios.post(url, {
-        email: email,
-        password: password,
-      });
+      const url = `${BACKEND_API}/users/login`;
+      const response = await axios.post(url, { email, password });
 
       if (response.data.success === true) {
-        if (response.data.data.status === "active") {
-          localStorage.setItem("user", JSON.stringify(response.data.data));
-          if (response.data.data.role === "user") {
+        const userData = response.data.data;
+        if (userData.status === "active") {
+          localStorage.setItem("user", JSON.stringify(userData));
+          if (userData.role === "user") {
             navigate("/user/home");
             window.location.reload();
-          } else if (response.data.data.role === "admin") {
+          } else if (userData.role === "admin") {
             navigate("/admin/dashboard");
             window.location.reload();
           }
         } else {
           setShowModal(true);
           setError(true);
-          setMessage(
-            "Account Pending! Please wait for admins to approve your account"
-          );
+          setMessage("Account Pending! Please wait for admins to approve your account");
         }
       }
     } catch (error: any) {
       setShowModal(true);
       setError(true);
       setMessage(error.response.data.message);
-    } finally {
-      setLoading(false); // stop loading
     }
   };
 
   const onForgotPassword = async () => {
     try {
-      let url = `${BACKEND_API}/users/forgot-password`;
+      const url = `${BACKEND_API}/users/forgot-password`;
+      const response = await axios.post(url, { email });
 
-      let response = await axios.post(url, {
-        email: email,
-      });
-
-      if (response.data.success === true) {
-        setShowModal(true);
-        setError(false);
-        setMessage(response.data.message);
-      } else {
-        setShowModal(true);
-        setError(true);
-        setMessage(response.data.message);
-      }
+      setShowModal(true);
+      setError(!response.data.success);
+      setMessage(response.data.message);
     } catch (error: any) {
       setShowModal(true);
       setError(true);
@@ -85,17 +64,18 @@ const Login = () => {
     <>
       <div className="w-full flex h-screen items-center justify-center bg-[#008A3D]">
         <div className="w-[320px] lg:w-1/4 flex flex-col items-center justify-center bg-white p-8 rounded-2xl gap-6">
-          {/* title */}
+          {/* Title */}
           <div className="w-full flex flex-col items-center justify-center">
-            <img src={Logo} alt="/" className="w-[150px]" />
+            <img src={Logo} alt="Logo" className="w-[150px]" />
             <div className="flex flex-col items-center justify-center">
               <p className="font-bold text-[#008A3D]">BRGY 360</p>
               <p className="text-sm font-normal">Login to your account</p>
             </div>
           </div>
-          {/* fields */}
+
+          {/* Fields */}
           <div className="w-full flex flex-col items-center justify-center gap-4">
-            {/* email */}
+            {/* Email */}
             <div className="w-full flex flex-col items-start justify-center gap-2">
               <p className="text-sm font-normal">Email</p>
               <input
@@ -106,7 +86,8 @@ const Login = () => {
                 placeholder="enter your email"
               />
             </div>
-            {/* password */}
+
+            {/* Password */}
             <div className="w-full flex flex-col items-start justify-center gap-2">
               <p className="text-sm font-normal">Password</p>
               <div className="w-full flex flex-row relative items-center">
@@ -135,12 +116,13 @@ const Login = () => {
               </div>
             </div>
           </div>
-          {/* misc */}
+
+          {/* Misc */}
           <div className="w-full flex flex-row items-center">
             <div className="w-1/2 flex flex-row items-center justify-start gap-2">
               {remember ? (
                 <div
-                  className="w-3 h-3 rounded-sm outline outline-[#008A3D] bg-[#008A3D] cursor-pointer"
+                  className="w-3 h-3 rounded-sm outline outline-[#008A3D] bg-[#008A3D] cursor-pointer flex items-center justify-center"
                   onClick={() => setRemember(!remember)}
                 >
                   <RiCheckLine size={12} color="white" />
@@ -148,9 +130,7 @@ const Login = () => {
               ) : (
                 <div
                   className="w-3 h-3 rounded-sm outline outline-[#008A3D] cursor-pointer"
-                  onClick={() => {
-                    setRemember(!remember);
-                  }}
+                  onClick={() => setRemember(!remember)}
                 ></div>
               )}
               <p className="text-sm font-normal">Remember me</p>
@@ -164,51 +144,25 @@ const Login = () => {
               </p>
             </div>
           </div>
-          {/* button with indicator */}
+
+          {/* Button */}
           <div
-            className={`w-full flex items-center justify-center bg-[#008A3D] py-3 rounded-xl text-white text-sm font-normal cursor-pointer ${
-              loading ? "opacity-70 cursor-not-allowed" : ""
-            }`}
-            onClick={!loading ? onLogin : undefined}
+            className="w-full flex items-center justify-center bg-[#008A3D] py-3 rounded-xl text-white text-sm font-normal cursor-pointer"
+            onClick={onLogin}
           >
-            {loading ? (
-              <span className="flex items-center gap-2">
-                <svg
-                  className="animate-spin h-4 w-4 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                  ></path>
-                </svg>
-                Logging in...
-              </span>
-            ) : (
-              "Login Now"
-            )}
+            Login Now
           </div>
-          {/* redirect */}
+
+          {/* Redirect */}
           <p className="w-full flex flex-row items-center justify-center gap-1 text-sm font-normal whitespace-nowrap">
-            Sign up as
+            Sign up as{" "}
             <span
               className="cursor-pointer text-[#008A3D]"
               onClick={() => navigate("/register/admin")}
             >
               Admin
             </span>
-            <span className="">or</span>
+            <span>or</span>
             <span
               className="cursor-pointer text-[#008A3D]"
               onClick={() => navigate("/register/user")}
@@ -218,13 +172,12 @@ const Login = () => {
           </p>
         </div>
       </div>
+
       {showModal && (
         <Modal
           error={error}
           message={message}
-          onClose={() => {
-            setShowModal(false);
-          }}
+          onClose={() => setShowModal(false)}
         />
       )}
     </>
