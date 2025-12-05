@@ -56,6 +56,8 @@ const forgotPassword = async (req, res) => {
       });
     }
 
+    console.log("FORGOT PASSWORD STARTED");
+
     const user = await User.findOne({ email });
     if (!user)
       return res.status(400).json({
@@ -72,12 +74,22 @@ const forgotPassword = async (req, res) => {
     user.resetPasswordExpires = resetTokenExpires;
     await user.save();
 
-    // Create transporter (example using Gmail)
+    // // Create transporter (example using Gmail)
+    // const transporter = nodemailer.createTransport({
+    //   service: "gmail",
+    //   auth: {
+    //     user: process.env.GMAIL, // Your email
+    //     pass: process.env.GMAIL_PK, // Your email app password (not your Gmail password!)
+    //   },
+    // });
+
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp-relay.brevo.com",
+      port: 587,
+      secure: false,
       auth: {
-        user: process.env.GMAIL, // Your email
-        pass: process.env.GMAIL_PK, // Your email app password (not your Gmail password!)
+        user: process.env.BREVO, // Your Brevo login email OR sender email
+        pass: process.env.BREVO_PK, // The SMTP key generated in Brevo
       },
     });
 
@@ -85,6 +97,7 @@ const forgotPassword = async (req, res) => {
     const resetLink = `https://brgy360-be.onrender.com/user/forgot-password/${resetToken}`;
     // const resetLink = `http://localhost:5173/user/forgot-password/${resetToken}`;
 
+    console.log("SENDING EMAILLL");
     // Send mail
     await transporter.sendMail({
       from: `"BRGY360" <${process.env.GMAIL}>`,
@@ -97,6 +110,7 @@ const forgotPassword = async (req, res) => {
       `,
     });
 
+    console.log("DONE!");
     res.json({
       success: true,
       message: "Password reset link sent to email!",
