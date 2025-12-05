@@ -45,6 +45,16 @@ dotenv.config();
 //   }
 // };
 
+const transporter = nodemailer.createTransport({
+      host: "smtp-relay.brevo.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.BREVO, // Your Brevo login email OR sender email
+        pass: process.env.BREVO_PK, // The SMTP key generated in Brevo
+      },
+    });
+
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
