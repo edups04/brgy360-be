@@ -80,7 +80,7 @@ const transporter = nodemailer.createTransport({
         pass: process.env.BREVO_PK, // The SMTP key generated in Brevo
       },
     });
-
+        
     // Reset link
     const resetLink = `https://brgy360-be.onrender.com/user/forgot-password/${resetToken}`;
     // const resetLink = `http://localhost:5173/user/forgot-password/${resetToken}`;
