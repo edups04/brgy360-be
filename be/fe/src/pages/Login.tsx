@@ -17,10 +17,13 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
 
+  // NEW: loading state
+  const [loading, setLoading] = useState(false);
+
   const onLogin = async () => {
     try {
+      setLoading(true); // start loading
       let url = `${BACKEND_API}/users/login`;
-      // let url = "http://localhost:8080/api/users/login";
 
       let response = await axios.post(url, {
         email: email,
@@ -49,13 +52,14 @@ const Login = () => {
       setShowModal(true);
       setError(true);
       setMessage(error.response.data.message);
+    } finally {
+      setLoading(false); // stop loading
     }
   };
 
   const onForgotPassword = async () => {
     try {
       let url = `${BACKEND_API}/users/forgot-password`;
-      // let url = "http://localhost:8080/api/users/forgot-password";
 
       let response = await axios.post(url, {
         email: email,
@@ -160,12 +164,40 @@ const Login = () => {
               </p>
             </div>
           </div>
-          {/* button */}
+          {/* button with indicator */}
           <div
-            className="w-full flex items-center justify-center bg-[#008A3D] py-3 rounded-xl text-white text-sm font-normal cursor-pointer"
-            onClick={onLogin}
+            className={`w-full flex items-center justify-center bg-[#008A3D] py-3 rounded-xl text-white text-sm font-normal cursor-pointer ${
+              loading ? "opacity-70 cursor-not-allowed" : ""
+            }`}
+            onClick={!loading ? onLogin : undefined}
           >
-            Login Now
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <svg
+                  className="animate-spin h-4 w-4 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
+                </svg>
+                Logging in...
+              </span>
+            ) : (
+              "Login Now"
+            )}
           </div>
           {/* redirect */}
           <p className="w-full flex flex-row items-center justify-center gap-1 text-sm font-normal whitespace-nowrap">

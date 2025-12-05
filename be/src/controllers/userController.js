@@ -44,7 +44,6 @@ dotenv.config();
 //       .json({ success: false, message: "Server error", error: error.message });
 //   }
 // };
-
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -72,12 +71,13 @@ const forgotPassword = async (req, res) => {
     user.resetPasswordExpires = resetTokenExpires;
     await user.save();
 
-    // Create transporter (example using Gmail)
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
+const transporter = nodemailer.createTransport({
+      host: "smtp-relay.brevo.com",
+      port: 587,
+      secure: false,
       auth: {
-        user: process.env.GMAIL, // Your email
-        pass: process.env.GMAIL_PK, // Your email app password (not your Gmail password!)
+        user: process.env.BREVO, // Your Brevo login email OR sender email
+        pass: process.env.BREVO_PK, // The SMTP key generated in Brevo
       },
     });
 
