@@ -72,14 +72,18 @@ const forgotPassword = async (req, res) => {
     await user.save();
 
 const transporter = nodemailer.createTransport({
-      host: "smtp-relay.brevo.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: process.env.BREVO, // Your Brevo login email OR sender email
-        pass: process.env.BREVO_PK, // The SMTP key generated in Brevo
-      },
-    });
+  host: "smtp-relay.brevo.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.BREVO,
+    pass: process.env.BREVO_PK,
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
+  connectionTimeout: 60000,
+});
         
     // Reset link
     const resetLink = `https://brgy360-be.onrender.com/user/forgot-password/${resetToken}`;
