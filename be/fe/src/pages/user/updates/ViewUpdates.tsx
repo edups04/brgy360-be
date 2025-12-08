@@ -14,18 +14,19 @@ const ViewUpdates = () => {
   const [page, setPage] = useState(1);
   const limit = 5;
 
+  // Lightbox state
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxData, setLightboxData] = useState<any>(null);
+
   useEffect(() => {
     const getData = async () => {
       if (state) {
         try {
           let url = `${BACKEND_API}/projects/${state}`;
-          // let url = `http://localhost:8080/api/projects/${state}`;
-
           let response = await axios.get(url);
 
           if (response.data.success === true) {
             setData(response.data.data);
-            console.log(response.data.data.image);
           }
         } catch (error: any) {
           console.log(error);
@@ -34,7 +35,24 @@ const ViewUpdates = () => {
     };
 
     getData();
-  }, []);
+  }, [state]);
+
+  const getImageUrl = (imgName?: string) => {
+    if (!imgName || imgName === "N/A") return "";
+    return `${BACKEND_API}/images/${encodeURIComponent(imgName)}`;
+  };
+
+  const openLightbox = (update: any) => {
+    if (update.image && update.image !== "N/A") {
+      setLightboxData(update);
+      setLightboxOpen(true);
+    }
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+    setLightboxData(null);
+  };
 
   return (
     <>
@@ -55,23 +73,22 @@ const ViewUpdates = () => {
                 Project Updates
               </p>
             </div>
-            {/* image */}
+
+            {/* image with lightbox */}
             <div
-              className="w-full max-w-[50%] h-[220px] lg:h-[620px] bg-gray-200 rounded-xl bg-cover bg-center"
+              className="w-full max-w-[50%] h-[220px] lg:h-[620px] bg-gray-200 rounded-xl bg-cover bg-center cursor-zoom-in"
+              onClick={() => openLightbox(data)}
               style={{
                 backgroundImage:
                   data.image !== "N/A"
-                    ? `url(${BACKEND_API}/images/${encodeURIComponent(
-                        data.image
-                      )})`
+                    ? `url(${getImageUrl(data.image)})`
                     : "",
               }}
             ></div>
+
             {/* title */}
             <div className="w-full flex flex-col items-start justify-center gap-2 bg-gray-50 p-2 rounded-lg">
-              <p className="text-lg font-semibold text-green-700">
-                {data.title}
-              </p>
+              <p className="text-lg font-semibold text-green-700">{data.title}</p>
               <div className="w-full flex flex-row items-center justify-start gap-2 text-green-700">
                 <RiCalendarLine size={16} />
                 <p className="text-sm font-normal">
@@ -83,61 +100,53 @@ const ViewUpdates = () => {
                 </p>
               </div>
             </div>
+
             <div className="w-full flex items-center justify-start bg-gray-50 p-2 rounded-lg">
               <pre className="text-lg font-normal whitespace-pre-wrap break-words font-sans">
                 {data.contents}
               </pre>
             </div>
           </div>
-          {/* MORE NEWS */}
+
+          {/* MORE UPDATES */}
           <div className="w-full lg:w-1/4 flex flex-col items-center justify-center gap-4">
-            {/* header */}
             <div className="w-full flex items-center justify-start bg-green-700 p-3 text-lg font-normal text-white rounded-xl">
               More Updates
             </div>
-            {/* news */}
-            {updates.length > 0
-              ? updates.map((update: any) => (
-                  <div
-                    className={`w-full flex flex-col items-start justify-center p-3 gap-2 cursor-pointer border-b border-black/5 rounded-xl ${
-                      data._id === update._id ? "bg-green-700/60" : ""
+
+            {updates.length > 0 &&
+              updates.map((update: any) => (
+                <div
+                  className={`w-full flex flex-col items-start justify-center p-3 gap-2 cursor-pointer border-b border-black/5 rounded-xl ${
+                    data._id === update._id ? "bg-green-700/60" : ""
+                  }`}
+                  onClick={() => openLightbox(update)}
+                  key={update._id}
+                >
+                  <p
+                    className={`text-lg font-semibold line-clamp-1 ${
+                      data._id === update._id ? "text-white" : "text-green-700"
                     }`}
-                    onClick={
-                      () => setData(update)
-                      // navigate("/user/transparency/updates/view", {
-                      //   state: update._id,
-                      // })
-                    }
-                    key={update._id}
                   >
-                    <p
-                      className={`text-lg font-semibold line-clamp-1 ${
-                        data._id === update._id
-                          ? "text-white"
-                          : "text-green-700"
-                      }`}
-                    >
-                      {update.title}
+                    {update.title}
+                  </p>
+                  <div
+                    className={`w-full flex flex-row items-center justify-start gap-1 ${
+                      data._id === update._id ? "text-white" : "text-green-700"
+                    }`}
+                  >
+                    <RiCalendarLine size={16} />
+                    <p className="text-sm font-normal ">
+                      {new Date(update.date).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
                     </p>
-                    <div
-                      className={`w-full flex flex-row items-center justify-start ${
-                        data._id === update._id
-                          ? "text-white"
-                          : "text-green-700"
-                      } gap-1`}
-                    >
-                      <RiCalendarLine size={16} />
-                      <p className="text-sm font-normal ">
-                        {new Date(update.date).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}
-                      </p>
-                    </div>
                   </div>
-                ))
-              : null}
+                </div>
+              ))}
+
             {/* pagination */}
             <div className="flex flex-row items-center justify-center space-x-4 py-2">
               {Array.from({ length: totalPages }, (_, index) => index + 1)
@@ -164,6 +173,32 @@ const ViewUpdates = () => {
           </div>
         </div>
       </div>
+
+      {/* Lightbox */}
+      {lightboxOpen && lightboxData && lightboxData.image && lightboxData.image !== "N/A" && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeLightbox();
+          }}
+        >
+          <button
+            onClick={closeLightbox}
+            className="absolute top-4 right-4 bg-black/50 text-white p-3 rounded-full"
+          >
+            ✕
+          </button>
+
+          <img
+            src={getImageUrl(lightboxData.image)}
+            className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-lg"
+          />
+
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white text-center max-w-[90%]">
+            <p className="font-semibold text-lg drop-shadow-lg">{lightboxData.title}</p>
+          </div>
+        </div>
+      )}
     </>
   );
 };

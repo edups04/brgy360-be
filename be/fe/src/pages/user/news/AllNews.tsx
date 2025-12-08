@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import UserNavbar from "../../../components/UserNavbar";
 import { useNews } from "../../../providers/NewsProvider";
 import { RiArrowLeftSLine, RiCalendarLine } from "react-icons/ri";
 import { useLocation, useNavigate } from "react-router-dom";
 import BACKEND_API from "../../../utils/API";
 
-const AllNews = () => {
+const AllNews: React.FC = () => {
   const { state } = useLocation();
   const {
     latestNews,
@@ -19,6 +19,14 @@ const AllNews = () => {
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
+  // Lightbox State — simplified (only open/close)
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [lightboxTitle, setLightboxTitle] = useState<string>("");
+
+  // Combined List (latest first + more news)
+  const combinedList = [...(latestNews || []), ...(news || [])];
+
   useEffect(() => {
     const getData = async () => {
       const user = localStorage.getItem("user");
@@ -28,6 +36,7 @@ const AllNews = () => {
 
         if (currUser) {
           await getNews("", currUser.barangayId, page, limit);
+
           if (!state) {
             await getLatestNews(currUser.barangayId);
           } else {
@@ -40,14 +49,51 @@ const AllNews = () => {
     getData();
   }, [page]);
 
+  // Utility
+  const getImageUrl = (imgName?: string) => {
+    if (!imgName || imgName === "N/A") return "";
+    return `${BACKEND_API}/images/${encodeURIComponent(imgName)}`;
+  };
+
+  // Lightbox — only shows one image, no switching
+  const openLightbox = (image?: string, title?: string) => {
+    if (!image || image === "N/A") return;
+
+    setLightboxImage(getImageUrl(image));
+    setLightboxTitle(title || "");
+    setLightboxOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+    setLightboxImage(null);
+  };
+
+  // ESC key closes only (left/right removed)
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (!lightboxOpen) return;
+      if (e.key === "Escape") closeLightbox();
+    },
+    [lightboxOpen]
+  );
+
+  useEffect(() => {
+    if (lightboxOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lightboxOpen, handleKeyDown]);
+
   return (
     <>
       <UserNavbar />
+
       <div className="flex flex-col lg:flex-row items-center justify-center">
-        <div className="hidden lg:flex w-[100px]"></div>
+        <div className="hidden lg:flex w-[100px]" />
         <div className="w-full flex flex-col lg:flex-row items-start justify-center px-4 py-6 gap-6">
           <div className="w-full lg:w-3/4 flex flex-col items-center justify-center gap-6">
-            {/* header */}
+            {/* Header */}
             <div className="w-full flex flex-row gap-2 items-center justify-start">
               <RiArrowLeftSLine
                 size={24}
@@ -59,78 +105,84 @@ const AllNews = () => {
                 News and Announcements
               </p>
             </div>
-            {latestNews
-              ? latestNews.map((selectedNews) => {
-                  return (
-                    <>
-                      <div
-                        className="w-full flex flex-col items-center justify-center gap-6"
-                        key={selectedNews._id}
-                      >
-                        {/* image */}
-                        <div
-                          className="w-full max-w-[75%] h-[220px] lg:h-[620px] bg-gray-200 rounded-xl bg-cover bg-center"
-                          style={{
-                            backgroundImage:
-                              selectedNews.image !== "N/A"
-                                ? `url(${BACKEND_API}/images/${encodeURIComponent(
-                                    selectedNews.image
-                                  )})`
-                                : "",
-                          }}
-                        ></div>
-                        {/* content */}
-                        <div className="w-full flex flex-col items-start justify-center gap-2 bg-gray-50 p-2 rounded-lg">
-                          <p className="text-lg font-semibold text-green-700">
-                            {selectedNews.title}
-                          </p>
-                          <pre className="text-lg font-normal whitespace-pre-wrap break-words font-sans">
-                            {selectedNews.contents}
-                          </pre>
-                        </div>
-                      </div>
-                    </>
-                  );
-                })
-              : null}
+
+            {/* Latest News */}
+            {latestNews &&
+              latestNews.map((selectedNews) => {
+                return (
+                  <div
+                    key={selectedNews._id}
+                    className="w-full flex flex-col items-center justify-center gap-6"
+                  >
+                    {/* Image — ONLY image opens the lightbox */}
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onClick={() =>
+                        openLightbox(selectedNews.image, selectedNews.title)
+                      }
+                      className="w-full max-w-[75%] h-[220px] lg:h-[620px] bg-gray-200 rounded-xl bg-cover bg-center cursor-zoom-in"
+                      style={{
+                        backgroundImage:
+                          selectedNews.image && selectedNews.image !== "N/A"
+                            ? `url(${getImageUrl(selectedNews.image)})`
+                            : "",
+                      }}
+                    />
+
+                    {/* Content — DOES NOT open lightbox */}
+                    <div className="w-full flex flex-col items-start justify-center gap-2 bg-gray-50 p-2 rounded-lg">
+                      <p className="text-lg font-semibold text-green-700">
+                        {selectedNews.title}
+                      </p>
+
+                      <pre className="text-lg whitespace-pre-wrap break-words font-sans">
+                        {selectedNews.contents}
+                      </pre>
+                    </div>
+                  </div>
+                );
+              })}
           </div>
+
+          {/* Right Sidebar — More News */}
           <div className="w-full lg:w-1/4 flex flex-col items-center justify-center gap-4">
-            {/* header */}
             <div className="w-full flex items-center justify-start bg-green-700 p-3 text-sm font-normal text-white rounded-xl">
               More News
             </div>
-            {/* news */}
-            {news.length > 0
-              ? news.map((news: any) => (
+
+            {news.length > 0 &&
+              news.map((n) => {
+                return (
                   <div
+                    key={n._id}
                     className={`w-full flex flex-col items-start justify-center p-3 gap-2 cursor-pointer border-b border-black/5 rounded-xl ${
-                      latestNews[0]?._id === news._id ? "bg-green-700/60" : ""
+                      latestNews[0]?._id === n._id ? "bg-green-700/60" : ""
                     }`}
                     onClick={() => {
-                      setLatestNews([news]);
-                      // navigate("/user/news/all", { state: news._id })
+                      setLatestNews([n]); // switching latest news DOES NOT open lightbox
                     }}
-                    key={news._id}
                   >
                     <p
                       className={`text-lg font-semibold line-clamp-1 ${
-                        latestNews[0]?._id === news._id
+                        latestNews[0]?._id === n._id
                           ? "text-white"
                           : "text-green-700"
-                      } `}
+                      }`}
                     >
-                      {news.title}
+                      {n.title}
                     </p>
+
                     <div
-                      className={`w-full flex flex-row items-center justify-start ${
-                        latestNews[0]?._id === news._id
+                      className={`w-full flex flex-row items-center justify-start gap-1 ${
+                        latestNews[0]?._id === n._id
                           ? "text-white"
                           : "text-green-700"
-                      } gap-1`}
+                      }`}
                     >
                       <RiCalendarLine size={16} />
-                      <p className="text-sm font-normal ">
-                        {new Date(news.date).toLocaleDateString("en-US", {
+                      <p className="text-sm">
+                        {new Date(n.date).toLocaleDateString("en-US", {
                           year: "numeric",
                           month: "long",
                           day: "numeric",
@@ -138,9 +190,10 @@ const AllNews = () => {
                       </p>
                     </div>
                   </div>
-                ))
-              : null}
-            {/* pagination */}
+                );
+              })}
+
+            {/* Pagination */}
             <div className="flex flex-row items-center justify-center space-x-4 py-2">
               {Array.from({ length: totalPages }, (_, index) => index + 1)
                 .filter(
@@ -165,8 +218,35 @@ const AllNews = () => {
             </div>
           </div>
         </div>
-        <div className="w-full h-[10vh] lg:hidden"></div>
+
+        <div className="w-full h-[10vh] lg:hidden" />
       </div>
+
+      {/* Lightbox Overlay — NO ARROWS, NO SWITCHING */}
+      {lightboxOpen && lightboxImage && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeLightbox();
+          }}
+        >
+          <button
+            onClick={closeLightbox}
+            className="absolute top-4 right-4 bg-black/50 text-white p-3 rounded-full"
+          >
+            ✕
+          </button>
+
+          <img
+            src={lightboxImage}
+            className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-lg"
+          />
+
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white text-center max-w-[90%]">
+            <p className="font-semibold text-lg drop-shadow-lg">{lightboxTitle}</p>
+          </div>
+        </div>
+      )}
     </>
   );
 };

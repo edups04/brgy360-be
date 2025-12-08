@@ -1,5 +1,9 @@
 {
   "dependencies": {
+<<<<<<< HEAD
     "@getbrevo/brevo": "^3.0.1"
+=======
+    "@pdftron/webviewer": "^11.9.0"
+>>>>>>> 499c49a7b4bd4b60089c7973065d6b3c35a3f805
   }
 }
