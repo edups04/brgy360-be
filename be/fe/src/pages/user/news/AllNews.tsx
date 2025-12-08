@@ -152,7 +152,7 @@ const AllNews: React.FC = () => {
             </div>
 
             {news.length > 0 &&
-              news.map((n, idx) => {
+              news.map((n) => {
                 return (
                   <div
                     key={n._id}
