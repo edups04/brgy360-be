@@ -9,6 +9,7 @@ import { checkDuplicate } from "../utils/duplicateChecker.js";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import mongoose from "mongoose";
+import { sendTransactionalEmail } from "../utils/brevoSDK.js";
 
 // Get the directory name of the current module
 const __filename = fileURLToPath(import.meta.url);
@@ -16,34 +17,6 @@ const __dirname = path.dirname(__filename);
 dotenv.config();
 
 // * forgot password
-// const forgotPassword = async (req, res) => {
-//   try {
-//     const { email } = req.body;
-
-//     if (!email) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Please input your email to send a confirmation code link",
-//       });
-//     }
-
-//     const user = await User.findOne({ email });
-//     if (!user)
-//       return res
-//         .status(400)
-//         .json({ success: false, message: "Invalid email!" });
-
-//     res.json({
-//       success: true,
-//       message: "Confirmation link sent!",
-//       data: user,
-//     });
-//   } catch (error) {
-//     res
-//       .status(500)
-//       .json({ success: false, message: "Server error", error: error.message });
-//   }
-// };
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -73,37 +46,13 @@ const forgotPassword = async (req, res) => {
     user.resetPasswordExpires = resetTokenExpires;
     await user.save();
 
-    const transporter = nodemailer.createTransport({
-      host: "smtp-relay.brevo.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.BREVO,
-        pass: process.env.BREVO_PK,
-      },
-      tls: {
-        rejectUnauthorized: false,
-      },
-      connectionTimeout: 60000,
-    });
-
     // Reset link
     const resetLink = `https://brgy360-be.onrender.com/user/forgot-password/${resetToken}`;
     // const resetLink = `http://localhost:5173/user/forgot-password/${resetToken}`;
 
     console.log("SENDING EMAILLL");
     // Send mail
-    await transporter.sendMail({
-      from: `"BRGY360" <${process.env.GMAIL}>`,
-      to: email,
-      subject: "Password Reset Request",
-      html: `
-        <h3>Password Reset</h3>
-        <p>Click the link below to reset your password. This link is valid for 15 minutes:</p>
-        <a href="${resetLink}">${resetLink}</a>
-      `,
-    });
-
+    await sendTransactionalEmail(resetLink, email);
     console.log("DONE!");
     res.json({
       success: true,

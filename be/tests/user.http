@@ -101,3 +101,11 @@ Content-Type: application/json
 
 ### * Delete User
 DELETE {{baseUrl}}/users/6820c73c435e30a5a6ec1c59
+
+### * FORGOT PASSWORD
+POST {{baseUrl}}/users/forgot-password/
+Content-Type: application/json
+
+{
+  "email": "orijrodadnem@gmail.com"
+}
