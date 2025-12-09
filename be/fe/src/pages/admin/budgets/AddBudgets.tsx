@@ -24,7 +24,7 @@ const AddBudgets = () => {
 
   const currentYear = new Date().getFullYear();
   const yearOptions = Array.from(
-    { length: currentYear - 2000 + 1 },
+    { length: currentYear - 2000 + 2 },
     (_, i) => currentYear - i
   ).filter((year) => !years.includes(year));
 
