@@ -90,11 +90,10 @@ const RequestsHistory = () => {
       form.getTextField("placeOfBirth")?.setText(data.data.placeOfBirth);
       form.getTextField("birthdate")?.setText(data.data.birthdate);
       form.getTextField("purpose")?.setText(data.data.purpose);
-      form.getTextField("dateRequested")?.setText(formattedDate);
-
+      
       const validUntilDate = new Date(date);
       validUntilDate.setMonth(validUntilDate.getMonth() + 2);
-
+      
       const validUntil = `${String(validUntilDate.getMonth() + 1).padStart(
         2,
         "0"
@@ -102,7 +101,11 @@ const RequestsHistory = () => {
         2,
         "0"
       )}-${validUntilDate.getFullYear()}`;
-      form.getTextField("validUntil")?.setText(validUntil);
+      
+      if (data.status === "approved" || data.status === "completed") {
+        form.getTextField("dateRequested")?.setText(formattedDate);
+        form.getTextField("validUntil")?.setText(validUntil);
+      }
       // form
       //   .getTextField("requestNumber")
       //   ?.setText(data.requestNumber.toString());
@@ -130,8 +133,11 @@ const RequestsHistory = () => {
           `${data.data.firstName} ${data.data.middleName} ${data.data.lastName}`
         );
       form.getTextField("address")?.setText(data.data.address);
-      form.getTextField("purpose")?.setText(data.data.purpose);
-      form.getTextField("dateRequested")?.setText(formattedDate);
+      form.getTextField("yearsLiving")?.setText(data.data.yearsLiving);
+      form.getTextField("gender")?.setText(data.data.gender);
+      if (data.status === "approved" || data.status === "completed") {
+        form.getTextField("dateRequested")?.setText(formattedDate);
+      }
     } else if (data.requestedDocumentType === "first-time-job-seeker") {
       form
         .getTextField("fullName")

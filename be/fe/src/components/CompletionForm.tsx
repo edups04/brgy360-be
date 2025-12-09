@@ -119,8 +119,11 @@ const CompletionForm = ({
           `${data.data.firstName} ${data.data.middleName} ${data.data.lastName}`
         );
       form.getTextField("address")?.setText(data.data.address);
-      form.getTextField("purpose")?.setText(data.data.purpose);
-      form.getTextField("dateRequested")?.setText(formattedDate);
+      form.getTextField("yearsLiving")?.setText(data.data.yearsLiving);
+      form.getTextField("gender")?.setText(data.data.gender);
+      if (data.status === "approved" || data.status === "completed") {
+        form.getTextField("dateRequested")?.setText(formattedDate);
+      }
     } else if (data.requestedDocumentType === "first-time-job-seeker") {
       form
         .getTextField("fullName")
@@ -277,8 +280,11 @@ const CompletionForm = ({
           `${data.data.firstName} ${data.data.middleName} ${data.data.lastName}`
         );
       form.getTextField("address")?.setText(data.data.address);
-      form.getTextField("purpose")?.setText(data.data.purpose);
-      form.getTextField("dateRequested")?.setText(formattedDate);
+      form.getTextField("yearsLiving")?.setText(data.data.yearsLiving);
+      form.getTextField("gender")?.setText(data.data.gender);
+      if (data.status === "approved" || data.status === "completed") {
+        form.getTextField("dateRequested")?.setText(formattedDate);
+      }
     } else if (data.requestedDocumentType === "first-time-job-seeker") {
       form
         .getTextField("fullName")

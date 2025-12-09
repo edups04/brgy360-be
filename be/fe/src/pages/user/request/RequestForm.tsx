@@ -46,7 +46,8 @@ const RequestForm = () => {
     middleName: "",
     lastName: "",
     address: "",
-    purpose: "",
+    yearsLiving: "",
+    gender: "",
   });
   const [jobseekerData, setJobseekerData] = useState({
     honorifics: "",
@@ -147,7 +148,8 @@ const RequestForm = () => {
             middleName: `${userData.middleName}`,
             lastName: `${userData.lastName}`,
             address: userData.address,
-            purpose: "",
+            gender: userData.sex,
+            yearsLiving: "",
           });
           break;
         case "first-time-job-seeker":
@@ -218,7 +220,8 @@ const RequestForm = () => {
           `${residencyData.firstName} ${residencyData.middleName} ${residencyData.lastName}`
         );
       form.getTextField("address")?.setText(residencyData.address);
-      form.getTextField("purpose")?.setText(residencyData.purpose);
+      form.getTextField("yearsLiving")?.setText(residencyData.yearsLiving);
+      form.getTextField("gender")?.setText(residencyData.gender);
     } else if (formType === "first-time-job-seeker") {
       form
         .getTextField("fullName")
@@ -786,13 +789,36 @@ const RequestForm = () => {
 
               <div className="w-full flex flex-col items-start justify-center gap-2">
                 <p className="text-sm font-normal">
-                  Purpose{" "}
+                  Gender{" "}
+                  <span className="text-red-600 font-bold text-lg">*</span>
+                </p>
+                <select
+                  name="gender"
+                  id="gender"
+                  value={residencyData.gender}
+                  className="w-full outline-none border border-green-700 text-sm font-normal p-3 rounded-xl"
+                  onChange={(e) =>
+                    setResidencyData({
+                      ...residencyData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
+                >
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="others">Others</option>
+                </select>
+              </div>
+
+              <div className="w-full flex flex-col items-start justify-center gap-2">
+                <p className="text-sm font-normal">
+                  Since Year{" "}
                   <span className="text-red-600 font-bold text-lg">*</span>
                 </p>
                 <input
                   type="text"
-                  name="purpose"
-                  value={residencyData.purpose}
+                  name="yearsLiving"
+                  value={residencyData.yearsLiving}
                   onChange={(e) =>
                     setResidencyData({
                       ...residencyData,
@@ -800,7 +826,7 @@ const RequestForm = () => {
                     })
                   }
                   className="w-full outline-none border border-green-700 text-sm font-normal p-3 rounded-xl"
-                  placeholder="purpose"
+                  placeholder="Since Year"
                 />
               </div>
             </div>
