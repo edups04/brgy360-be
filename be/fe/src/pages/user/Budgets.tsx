@@ -135,7 +135,7 @@ const Budgets = () => {
                           <RiDownloadCloud2Line size={16} />
                         </div>
                       ) : (
-                        <div className="p-3 rounded-xl bg-green-700/20 text-white cursor-pointer">
+                        <div className="p-3 rounded-xl bg-green-700/100 text-white cursor-pointer">
                           <RiDownloadCloud2Line size={16} />
                         </div>
                       )}

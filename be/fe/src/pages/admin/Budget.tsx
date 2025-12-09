@@ -103,7 +103,7 @@ const Budget = () => {
           <div className="w-full flex flex-col items-start justify-center">
             <p className="text-sm font-semibold">Budget Overview</p>
             <p className="text-sm font-normal">
-              overview of brgy budgets over the years
+              overview of barangay budgets over the years
             </p>
           </div>
           {/* year and add */}
