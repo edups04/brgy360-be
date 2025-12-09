@@ -3,6 +3,8 @@ import UserNavbar from "../../components/UserNavbar";
 import { useRequests } from "../../providers/RequestsProvider";
 import { PDFDocument } from "pdf-lib";
 import { useLocation } from "react-router-dom";
+import BACKEND_API from "../../utils/API";
+import axios from "axios";
 
 const RequestsHistory = () => {
   const [status, setStatus] = useState("");
@@ -11,6 +13,14 @@ const RequestsHistory = () => {
   const [page, setPage] = useState(1);
   const limit = 10;
   const { state } = useLocation();
+
+  const [image, setImage] = useState<File | null>(null);
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file); // Store the file itself
+    }
+  };
 
   useEffect(() => {
     if (state) {
@@ -34,6 +44,7 @@ const RequestsHistory = () => {
     getData();
   }, [status, formType, page]);
 
+  // ! UPDATE THIS
   const generateAndPreviewPdf = async (data: any) => {
     console.log(data);
 
@@ -70,40 +81,112 @@ const RequestsHistory = () => {
 
     // Fill in form fields based on form type
     if (data.requestedDocumentType === "barangay-clearance") {
-      form.getTextField("fullName")?.setText(data.data.fullName);
+      form
+        .getTextField("fullName")
+        ?.setText(
+          `${data.data.firstName} ${data.data.middleName} ${data.data.lastName}`
+        );
       form.getTextField("address")?.setText(data.data.address);
-      form.getTextField("purok")?.setText(data.data.purok);
+      form.getTextField("placeOfBirth")?.setText(data.data.placeOfBirth);
       form.getTextField("birthdate")?.setText(data.data.birthdate);
       form.getTextField("purpose")?.setText(data.data.purpose);
       form.getTextField("dateRequested")?.setText(formattedDate);
-      form
-        .getTextField("requestNumber")
-        ?.setText(data.requestNumber.toString());
-      data.issuanceDate === "N/A"
-        ? form.getTextField("issuanceDate")?.setText("")
-        : form.getTextField("issuanceDate")?.setText(data.issuanceDate);
-      data.placeOfIssuance === "N/A"
-        ? form.getTextField("placeOfIssuance")?.setText("")
-        : form.getTextField("placeOfIssuance")?.setText(data.placeOfIssuance);
+
+      const validUntilDate = new Date(date);
+      validUntilDate.setMonth(validUntilDate.getMonth() + 2);
+
+      const validUntil = `${String(validUntilDate.getMonth() + 1).padStart(
+        2,
+        "0"
+      )}-${String(validUntilDate.getDate()).padStart(
+        2,
+        "0"
+      )}-${validUntilDate.getFullYear()}`;
+      form.getTextField("validUntil")?.setText(validUntil);
+      // form
+      //   .getTextField("requestNumber")
+      //   ?.setText(data.requestNumber.toString());
+      // data.issuanceDate === "N/A"
+      //   ? form.getTextField("issuanceDate")?.setText("")
+      //   : form.getTextField("issuanceDate")?.setText(data.issuanceDate);
+      // data.placeOfIssuance === "N/A"
+      //   ? form.getTextField("placeOfIssuance")?.setText("")
+      //   : form.getTextField("placeOfIssuance")?.setText(data.placeOfIssuance);
     } else if (data.requestedDocumentType === "barangay-indigency") {
-      form.getTextField("fullName")?.setText(data.data.fullName);
+      form
+        .getTextField("fullName")
+        ?.setText(
+          `${data.data.firstName} ${data.data.middleName} ${data.data.lastName}`
+        );
       form.getTextField("address")?.setText(data.data.address);
       form.getTextField("purpose")?.setText(data.data.purpose);
-      form.getTextField("dateRequested")?.setText(formattedDate);
-      data.data.validUntil &&
-        form.getTextField("validUntil")?.setText(data.data.validUntil);
+      if (data.status === "approved" || data.status === "completed") {
+        form.getTextField("dateRequested")?.setText(formattedDate);
+      }
     } else if (data.requestedDocumentType === "certificate-of-residency") {
-      form.getTextField("fullName")?.setText(data.data.fullName);
+      form
+        .getTextField("fullName")
+        ?.setText(
+          `${data.data.firstName} ${data.data.middleName} ${data.data.lastName}`
+        );
       form.getTextField("address")?.setText(data.data.address);
       form.getTextField("purpose")?.setText(data.data.purpose);
       form.getTextField("dateRequested")?.setText(formattedDate);
     } else if (data.requestedDocumentType === "first-time-job-seeker") {
-      form.getTextField("fullName")?.setText(data.data.fullName);
+      form
+        .getTextField("fullName")
+        ?.setText(
+          `${data.data.firstName} ${data.data.middleName} ${data.data.lastName}`
+        );
       form.getTextField("address")?.setText(data.data.address);
       form.getTextField("honorifics")?.setText(data.data.honorifics);
       form.getTextField("schoolName")?.setText(data.data.schoolName);
       form.getTextField("purpose")?.setText(data.data.purpose);
       form.getTextField("dateRequested")?.setText(formattedDate);
+    }
+
+    try {
+      if (
+        data.data.image &&
+        data.data.image !== "N/A" &&
+        data.requestedDocumentType === "barangay-clearance"
+      ) {
+        // Fetch the image from the server
+        const response = await axios.get(
+          `${BACKEND_API}/images/${data.data.image}`,
+          { responseType: "arraybuffer" } // Ensure response is an array buffer
+        );
+
+        console.log("IMAGE FROM SERVER:", response);
+
+        // Get the image bytes and MIME type
+        const imageBytes = response.data;
+        const mimeType = response.headers["content-type"];
+
+        // Embed the image based on MIME type
+        let embeddedImage;
+        if (mimeType === "image/jpeg") {
+          embeddedImage = await pdfDoc.embedJpg(imageBytes);
+        } else if (mimeType === "image/png") {
+          embeddedImage = await pdfDoc.embedPng(imageBytes);
+        } else {
+          console.error("Unsupported image format. Use JPEG or PNG.");
+          return;
+        }
+
+        // Get the image field
+        const imageField = form.getField("image"); // Use "imageField" if that's the correct name
+
+        if (imageField) {
+          // Set the image in the field
+          // @ts-ignore
+          imageField.setImage(embeddedImage);
+        } else {
+          console.error("Image field 'image' not found in the PDF.");
+        }
+      }
+    } catch (error) {
+      console.error("Error setting image in PDF:", error);
     }
 
     // Flatten to make fields non-editable

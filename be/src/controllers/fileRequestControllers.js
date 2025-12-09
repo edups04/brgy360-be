@@ -46,6 +46,7 @@ import { checkDuplicate } from "../utils/duplicateChecker.js";
 //   }
 // };
 
+// ! UPDATE THIS
 const createFileRequest = async (req, res) => {
   try {
     console.log("Body:", req.body);
@@ -69,7 +70,8 @@ const createFileRequest = async (req, res) => {
         middleName: req.body.middleName,
         lastName: req.body.lastName,
         address: req.body.address,
-        purok: req.body.purok,
+        // purok: req.body.purok,
+        placeOfBirth: req.body.placeOfBirth,
         birthdate: req.body.birthdate,
         purpose: req.body.purpose,
         image: req.file?.filename || null,
@@ -334,6 +336,7 @@ const getFileRequests = async (req, res) => {
   }
 };
 
+// ! UPDATE THIS
 const updateFileRequest = async (req, res) => {
   try {
     const fileRequestId = req.params.id;
@@ -346,6 +349,7 @@ const updateFileRequest = async (req, res) => {
         requestedDocumentType,
         requestedBy,
         barangayId,
+        requestedDate: req.body.requestedDate,
       });
       if (hasMissingFields) return;
 

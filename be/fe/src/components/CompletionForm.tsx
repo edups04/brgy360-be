@@ -22,13 +22,14 @@ const CompletionForm = ({
 
   const handleCheckboxChange = (e) => {
     setNoDerogatoryRecord(e.target.checked);
-    // console.log("No Derogatory Record checked:", e.target.checked);
+    console.log("No Derogatory Record checked:", e.target.checked);
   };
 
   useEffect(() => {
     console.log("DATA", data);
   }, []);
 
+  // ! UPDATE THIS
   const generateAndPreviewPdf = async () => {
     console.log(data);
 
@@ -71,25 +72,37 @@ const CompletionForm = ({
           `${data.data.firstName} ${data.data.middleName} ${data.data.lastName}`
         );
       form.getTextField("address")?.setText(data.data.address);
-      form.getTextField("purok")?.setText(data.data.purok);
+      form.getTextField("placeOfBirth")?.setText(data.data.placeOfBirth);
       form.getTextField("birthdate")?.setText(data.data.birthdate);
       form
         .getTextField("noDerogatoryRecord")
         ?.setText(noDerogatoryRecord ? "NO DEROGATORY RECORD" : "");
       form.getTextField("purpose")?.setText(data.data.purpose);
       form.getTextField("dateRequested")?.setText(formattedDate);
+
+      const validUntilDate = new Date(date);
+      validUntilDate.setMonth(validUntilDate.getMonth() + 2);
+
+      const validUntil = `${String(validUntilDate.getMonth() + 1).padStart(
+        2,
+        "0"
+      )}-${String(validUntilDate.getDate()).padStart(
+        2,
+        "0"
+      )}-${validUntilDate.getFullYear()}`;
+      form.getTextField("validUntil")?.setText(validUntil);
       // form
       //   .getTextField("requestNumber")
       //   ?.setText(data.requestNumber.toString());
-      form
-        .getTextField("requestNumber")
-        ?.setText(residentCertificateNumber.toString());
-      data.issuanceDate === "N/A"
-        ? form.getTextField("issuanceDate")?.setText("")
-        : form.getTextField("issuanceDate")?.setText(data.issuanceDate);
-      data.placeOfIssuance === "N/A"
-        ? form.getTextField("placeOfIssuance")?.setText("")
-        : form.getTextField("placeOfIssuance")?.setText(data.placeOfIssuance);
+      // form
+      //   .getTextField("requestNumber")
+      //   ?.setText(residentCertificateNumber.toString());
+      // data.issuanceDate === "N/A"
+      //   ? form.getTextField("issuanceDate")?.setText("")
+      //   : form.getTextField("issuanceDate")?.setText(data.issuanceDate);
+      // data.placeOfIssuance === "N/A"
+      //   ? form.getTextField("placeOfIssuance")?.setText("")
+      //   : form.getTextField("placeOfIssuance")?.setText(data.placeOfIssuance);
     } else if (data.requestedDocumentType === "barangay-indigency") {
       form
         .getTextField("fullName")
@@ -174,6 +187,7 @@ const CompletionForm = ({
     window.open(blobUrl, "_blank");
   };
 
+  // ! UPDATE THIS
   const printPdf = async (data: any) => {
     console.log(data);
 
@@ -216,25 +230,36 @@ const CompletionForm = ({
           `${data.data.firstName} ${data.data.middleName} ${data.data.lastName}`
         );
       form.getTextField("address")?.setText(data.data.address);
-      form.getTextField("purok")?.setText(data.data.purok);
+      form.getTextField("placeOfBirth")?.setText(data.data.placeOfBirth);
       form.getTextField("birthdate")?.setText(data.data.birthdate);
       form.getTextField("purpose")?.setText(data.data.purpose);
       form
         .getTextField("noDerogatoryRecord")
         ?.setText(noDerogatoryRecord ? "NO DEROGATORY RECORD" : "");
       form.getTextField("dateRequested")?.setText(formattedDate);
-      form
-        .getTextField("requestNumber")
-        ?.setText(residentCertificateNumber.toString());
+      const validUntilDate = new Date(date);
+      validUntilDate.setMonth(validUntilDate.getMonth() + 2);
+
+      const validUntil = `${String(validUntilDate.getMonth() + 1).padStart(
+        2,
+        "0"
+      )}-${String(validUntilDate.getDate()).padStart(
+        2,
+        "0"
+      )}-${validUntilDate.getFullYear()}`;
+      form.getTextField("validUntil")?.setText(validUntil);
+      // form
+      //   .getTextField("requestNumber")
+      //   ?.setText(residentCertificateNumber.toString());
       // form
       //   .getTextField("requestNumber")
       //   ?.setText(data.requestNumber.toString());
-      data.issuanceDate === "N/A"
-        ? form.getTextField("issuanceDate")?.setText("")
-        : form.getTextField("issuanceDate")?.setText(data.issuanceDate);
-      data.placeOfIssuance === "N/A"
-        ? form.getTextField("placeOfIssuance")?.setText("")
-        : form.getTextField("placeOfIssuance")?.setText(data.placeOfIssuance);
+      // data.issuanceDate === "N/A"
+      //   ? form.getTextField("issuanceDate")?.setText("")
+      //   : form.getTextField("issuanceDate")?.setText(data.issuanceDate);
+      // data.placeOfIssuance === "N/A"
+      //   ? form.getTextField("placeOfIssuance")?.setText("")
+      //   : form.getTextField("placeOfIssuance")?.setText(data.placeOfIssuance);
     } else if (data.requestedDocumentType === "barangay-indigency") {
       form
         .getTextField("fullName")
@@ -244,7 +269,7 @@ const CompletionForm = ({
       form.getTextField("address")?.setText(data.data.address);
       form.getTextField("purpose")?.setText(data.data.purpose);
       form.getTextField("dateRequested")?.setText(formattedDate);
-      form.getTextField("validUntil")?.setText(data.data.validUntil);
+      // form.getTextField("validUntil")?.setText(data.data.validUntil);
     } else if (data.requestedDocumentType === "certificate-of-residency") {
       form
         .getTextField("fullName")
@@ -328,14 +353,25 @@ const CompletionForm = ({
       const today = new Date();
       const formatted = today.toISOString().split("T")[0];
 
-      const validUntilDate = new Date();
-      validUntilDate.setFullYear(validUntilDate.getFullYear() + 1);
+      // const validUntilDate = new Date();
+      // validUntilDate.setFullYear(validUntilDate.getFullYear() + 1);
 
-      const mm = String(validUntilDate.getMonth() + 1).padStart(2, "0");
-      const dd = String(validUntilDate.getDate()).padStart(2, "0");
-      const yyyy = validUntilDate.getFullYear();
+      // const mm = String(validUntilDate.getMonth() + 1).padStart(2, "0");
+      // const dd = String(validUntilDate.getDate()).padStart(2, "0");
+      // const yyyy = validUntilDate.getFullYear();
 
-      const validUntil = `${mm}-${dd}-${yyyy}`;
+      // const validUntil = `${mm}-${dd}-${yyyy}`;
+
+      const validUntilDate = new Date(formatted);
+      validUntilDate.setMonth(validUntilDate.getMonth() + 2);
+
+      const validUntil = `${String(validUntilDate.getMonth() + 1).padStart(
+        2,
+        "0"
+      )}-${String(validUntilDate.getDate()).padStart(
+        2,
+        "0"
+      )}-${validUntilDate.getFullYear()}`;
 
       let updatedData = {
         ...data.data,
@@ -344,12 +380,14 @@ const CompletionForm = ({
       };
 
       let response = await axios.put(url, {
-        placeOfIssuance: placeOfIssuance,
+        // placeOfIssuance: placeOfIssuance,
         status: "completed",
-        issuanceDate: formatted,
+        // issuanceDate: formatted,
         data: updatedData,
-        residentCertificateNumber: residentCertificateNumber,
+        // residentCertificateNumber: residentCertificateNumber,
       });
+
+      console.log("CONSOLE: ", response.data);
 
       if (response.data.success === true) {
         await printPdf(response.data.data);
@@ -383,7 +421,7 @@ const CompletionForm = ({
           {/* input */}
           {data.requestedDocumentType === "barangay-clearance" && (
             <>
-              <div className="w-full flex flex-col items-start justify-center gap-2">
+              {/* <div className="w-full flex flex-col items-start justify-center gap-2">
                 <p className="text-sm font-normal">Place of Issuance</p>
                 <input
                   type="text"
@@ -406,7 +444,7 @@ const CompletionForm = ({
                   placeholder="place of issuance"
                   className="text-sm font-normal outline-none border border-green-700 p-3 rounded-xl w-full"
                 />
-              </div>
+              </div> */}
               <div className="w-max flex flex-row items-center gap-2 border border-green-700 p-2 py-3 rounded-xl self-start">
                 <label
                   htmlFor="noDerogatoryRecord"
@@ -433,19 +471,13 @@ const CompletionForm = ({
             >
               Preview
             </button>
-            {(placeOfIssuance && residentCertificateNumber > 0) ||
-            data.requestedDocumentType !== "barangay-clearance" ? (
-              <button
-                className="text-sm font-normal text-white bg-green-700 p-3 rounded-xl"
-                onClick={() => printRequest()}
-              >
-                Print
-              </button>
-            ) : (
-              <button className="text-sm font-normal text-white bg-green-700/10 p-3 rounded-xl">
-                Print
-              </button>
-            )}
+
+            <button
+              className="text-sm font-normal text-white bg-green-700 p-3 rounded-xl"
+              onClick={() => printRequest()}
+            >
+              Print
+            </button>
           </div>
         </div>
       </div>

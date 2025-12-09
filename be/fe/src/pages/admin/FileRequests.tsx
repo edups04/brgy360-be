@@ -60,6 +60,7 @@ const FileRequests = () => {
 
       let response = await axios.put(url, {
         status: "approved",
+        dateRequested: new Date(),
       });
 
       if (response.data.success === true) {
@@ -78,6 +79,7 @@ const FileRequests = () => {
     getData();
   }, [status, search, formType, page]);
 
+  // ! UPDATE THIS
   const generateAndPreviewPdf = async (data: any) => {
     console.log(data);
 
@@ -120,22 +122,34 @@ const FileRequests = () => {
           `${data.data.firstName} ${data.data.middleName} ${data.data.lastName}`
         );
       form.getTextField("address")?.setText(data.data.address);
-      form.getTextField("purok")?.setText(data.data.purok);
+      form.getTextField("placeOfBirth")?.setText(data.data.placeOfBirth);
       form.getTextField("birthdate")?.setText(data.data.birthdate);
       form.getTextField("purpose")?.setText(data.data.purpose);
       form.getTextField("dateRequested")?.setText(formattedDate);
       form
         .getTextField("noDerogatoryRecord")
         ?.setText(data.data.noDerogatoryRecord);
-      form
-        .getTextField("requestNumber")
-        ?.setText(data.residentCertificateNumber.toString());
-      data.issuanceDate === "N/A"
-        ? form.getTextField("issuanceDate")?.setText("")
-        : form.getTextField("issuanceDate")?.setText(data.issuanceDate);
-      data.placeOfIssuance === "N/A"
-        ? form.getTextField("placeOfIssuance")?.setText("")
-        : form.getTextField("placeOfIssuance")?.setText(data.placeOfIssuance);
+
+      const validUntilDate = new Date(date);
+      validUntilDate.setMonth(validUntilDate.getMonth() + 2);
+
+      const validUntil = `${String(validUntilDate.getMonth() + 1).padStart(
+        2,
+        "0"
+      )}-${String(validUntilDate.getDate()).padStart(
+        2,
+        "0"
+      )}-${validUntilDate.getFullYear()}`;
+      form.getTextField("validUntil")?.setText(validUntil);
+      // form
+      //   .getTextField("requestNumber")
+      //   ?.setText(data.residentCertificateNumber.toString());
+      // data.issuanceDate === "N/A"
+      //   ? form.getTextField("issuanceDate")?.setText("")
+      //   : form.getTextField("issuanceDate")?.setText(data.issuanceDate);
+      // data.placeOfIssuance === "N/A"
+      //   ? form.getTextField("placeOfIssuance")?.setText("")
+      //   : form.getTextField("placeOfIssuance")?.setText(data.placeOfIssuance);
     } else if (data.requestedDocumentType === "barangay-indigency") {
       form
         .getTextField("fullName")
@@ -144,9 +158,9 @@ const FileRequests = () => {
         );
       form.getTextField("address")?.setText(data.data.address);
       form.getTextField("purpose")?.setText(data.data.purpose);
-      form.getTextField("dateRequested")?.setText(formattedDate);
-      data.data.validUntil &&
-        form.getTextField("validUntil")?.setText(data.data.validUntil);
+      if (data.status === "approved" || data.status === "completed") {
+        form.getTextField("dateRequested")?.setText(formattedDate);
+      }
     } else if (data.requestedDocumentType === "certificate-of-residency") {
       form
         .getTextField("fullName")

@@ -22,7 +22,7 @@ const RequestForm = () => {
     middleName: "",
     lastName: "",
     address: "",
-    purok: "",
+    placeOfBirth: "",
     birthdate: "",
     purpose: "",
   });
@@ -96,6 +96,7 @@ const RequestForm = () => {
     }
   }, []);
 
+  // ! UPDATE THIS
   const autoFillUserFields = async (state) => {
     // * SET AUTO FILL DATA ONCE THE USER CLICKS THE FORM
     const response = await axios.get(
@@ -118,7 +119,8 @@ const RequestForm = () => {
             middleName: `${userData.middleName}`,
             lastName: `${userData.lastName}`,
             address: userData.address,
-            purok: "",
+            placeOfBirth: "",
+            // purok: "",
             // const purok = (userData.address.match(/Purok\s+[A-Za-z]+(?:\s+[A-Za-z]+)*/i) || [null])[0]?.replace(/[.,]$/, "");
             birthdate: new Date(userData.birthdate).toISOString().split("T")[0],
             purpose: "",
@@ -162,6 +164,7 @@ const RequestForm = () => {
     }
   };
 
+  // ! UPDATE THIS
   const generateAndPreviewPdf = async () => {
     let res;
 
@@ -196,7 +199,8 @@ const RequestForm = () => {
           `${clearanceData.firstName} ${clearanceData.middleName} ${clearanceData.lastName}`
         );
       form.getTextField("address")?.setText(clearanceData.address);
-      form.getTextField("purok")?.setText(clearanceData.purok);
+      form.getTextField("placeOfBirth")?.setText(clearanceData.placeOfBirth);
+      // form.getTextField("purok")?.setText(clearanceData.purok);
       form.getTextField("birthdate")?.setText(clearanceData.birthdate);
       form.getTextField("purpose")?.setText(clearanceData.purpose);
     } else if (formType === "barangay-indigency") {
@@ -319,6 +323,7 @@ const RequestForm = () => {
   //   }
   // };
 
+  // ! UPDATE THIS
   const submitRequest = async () => {
     try {
       let url = `${BACKEND_API}/file-requests`;
@@ -334,7 +339,8 @@ const RequestForm = () => {
         clearanceFormData.append("middleName", clearanceData.middleName);
         clearanceFormData.append("lastName", clearanceData.lastName);
         clearanceFormData.append("address", clearanceData.address);
-        clearanceFormData.append("purok", clearanceData.purok);
+        clearanceFormData.append("placeOfBirth", clearanceData.placeOfBirth);
+        // clearanceFormData.append("purok", clearanceData.purok);
         clearanceFormData.append("birthdate", clearanceData.birthdate);
         clearanceFormData.append("purpose", clearanceData.purpose);
         if (image) {
@@ -520,23 +526,6 @@ const RequestForm = () => {
                 />
               </div>
               <div className="w-full flex flex-col items-start justify-center gap-2">
-                <p className="text-sm font-normal">
-                  Purok{" "}
-                  <span className="text-red-600 font-bold text-lg">*</span>
-                </p>
-                <input
-                  type="text"
-                  name="purok"
-                  value={clearanceData.purok}
-                  onChange={(e) =>
-                    setClearanceData({
-                      ...clearanceData,
-                      [e.target.name]: e.target.value,
-                    })
-                  }
-                  className="w-full outline-none border border-green-700 text-sm font-normal p-3 rounded-xl"
-                  placeholder="purok"
-                />
                 <div className="w-full flex flex-col items-start justify-center gap-2">
                   <p className="text-sm font-normal">
                     Birthdate{" "}
@@ -554,6 +543,25 @@ const RequestForm = () => {
                     }
                     className="w-full outline-none border border-green-700 text-sm font-normal p-3 rounded-xl"
                     placeholder="birth day"
+                  />
+                </div>
+                <div className="w-full flex flex-col items-start justify-center gap-2">
+                  <p className="text-sm font-normal">
+                    Place of Birth{" "}
+                    <span className="text-red-600 font-bold text-lg">*</span>
+                  </p>
+                  <input
+                    type="text"
+                    name="placeOfBirth"
+                    value={clearanceData.placeOfBirth}
+                    onChange={(e) =>
+                      setClearanceData({
+                        ...clearanceData,
+                        [e.target.name]: e.target.value,
+                      })
+                    }
+                    className="w-full outline-none border border-green-700 text-sm font-normal p-3 rounded-xl"
+                    placeholder="placeOfBirth"
                   />
                 </div>
                 <div className="w-full flex flex-col items-start justify-center gap-2">
