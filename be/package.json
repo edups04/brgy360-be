@@ -14,6 +14,8 @@
     "nodemon": "^3.1.9",
     "pdf-lib": "^1.17.1",
     "pdfkit": "^0.15.1",
+    "sib-api-v3-sdk": "^8.5.0",
+    "sib-api-v3-typescript": "^2.2.2",
     "ws": "^8.18.2"
   },
   "name": "be",
