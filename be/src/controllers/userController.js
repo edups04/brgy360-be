@@ -47,8 +47,8 @@ const forgotPassword = async (req, res) => {
     await user.save();
 
     // Reset link
-    // const resetLink = `https://brgy360-be.onrender.com/user/forgot-password/${resetToken}`;
-    const resetLink = `http://localhost:5173/user/forgot-password/${resetToken}`;
+    const resetLink = `https://brgy360-be.onrender.com/user/forgot-password/${resetToken}`;
+    // const resetLink = `http://localhost:5173/user/forgot-password/${resetToken}`;
 
     console.log("SENDING EMAILLL");
     // Send mail

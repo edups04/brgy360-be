@@ -50,13 +50,18 @@ const RequestForm = () => {
     gender: "",
   });
   const [jobseekerData, setJobseekerData] = useState({
-    honorifics: "",
     firstName: "",
     middleName: "",
     lastName: "",
+    birthdate: "",
+    age: "",
     address: "",
-    schoolName: "",
-    // purpose: "",
+    yearsLiving: "",
+    phoneNumber: "",
+    gender: "",
+    status: "",
+    educationalAttainment: "",
+    course: "",
   });
 
   const [requestedBy, setRequestedBy] = useState("");
@@ -76,7 +81,9 @@ const RequestForm = () => {
     };
 
     const selectedData = dataMap[formType];
-    return Object.values(selectedData).every((value) => value.trim() !== "");
+    return Object.values(selectedData).every(
+      (value) => String(value).trim() !== ""
+    );
   };
 
   useEffect(() => {
@@ -158,8 +165,14 @@ const RequestForm = () => {
             middleName: `${userData.middleName}`,
             lastName: `${userData.lastName}`,
             address: userData.address,
-            schoolName: "",
-            honorifics: userData.sex === "male" ? "Mr" : "Ms",
+            phoneNumber: userData.phoneNumber,
+            age: userData.age,
+            birthdate: new Date(userData.birthdate).toISOString().split("T")[0],
+            gender: userData.sex,
+            status: "",
+            yearsLiving: "",
+            educationalAttainment: "",
+            course: "",
           });
           break;
       }
@@ -229,8 +242,17 @@ const RequestForm = () => {
           `${jobseekerData.firstName} ${jobseekerData.middleName} ${jobseekerData.lastName}`
         );
       form.getTextField("address")?.setText(jobseekerData.address);
-      form.getTextField("honorifics")?.setText(jobseekerData.honorifics);
-      form.getTextField("schoolName")?.setText(jobseekerData.schoolName);
+
+      form.getTextField("birthdate")?.setText(jobseekerData.birthdate);
+      form.getTextField("age")?.setText(jobseekerData.age + "");
+      form.getTextField("yearsLiving")?.setText(jobseekerData.yearsLiving);
+      form.getTextField("phoneNumber")?.setText(jobseekerData.phoneNumber);
+      form.getTextField("gender")?.setText(jobseekerData.gender);
+      form.getTextField("status")?.setText(jobseekerData.status);
+      form
+        .getTextField("educationalAttainment")
+        ?.setText(jobseekerData.educationalAttainment);
+      form.getTextField("course")?.setText(jobseekerData.course);
     }
 
     // Handle image field (assuming imageField is the name of the image field in the PDF)
@@ -834,26 +856,6 @@ const RequestForm = () => {
             <div className="w-full flex flex-col items-center justify-center gap-4">
               <div className="w-full flex flex-col items-start justify-center gap-2">
                 <p className="text-sm font-normal">
-                  Honorifics{" "}
-                  <span className="text-red-600 font-bold text-lg">*</span>
-                </p>
-                <input
-                  type="text"
-                  name="honorifics"
-                  value={jobseekerData.honorifics}
-                  onChange={(e) =>
-                    setJobseekerData({
-                      ...jobseekerData,
-                      [e.target.name]: e.target.value,
-                    })
-                  }
-                  className="w-full outline-none border border-green-700 text-sm font-normal p-3 rounded-xl"
-                  placeholder="honorifics"
-                />
-              </div>
-
-              <div className="w-full flex flex-col items-start justify-center gap-2">
-                <p className="text-sm font-normal">
                   First Name{" "}
                   <span className="text-red-600 font-bold text-lg">*</span>
                 </p>
@@ -909,7 +911,25 @@ const RequestForm = () => {
                   placeholder="full name"
                 />
               </div>
-
+              <div className="w-full flex flex-col items-start justify-center gap-2">
+                <p className="text-sm font-normal">
+                  Phone Number{" "}
+                  <span className="text-red-600 font-bold text-lg">*</span>
+                </p>
+                <input
+                  type="text"
+                  name="honorifics"
+                  value={jobseekerData.phoneNumber}
+                  onChange={(e) =>
+                    setJobseekerData({
+                      ...jobseekerData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
+                  className="w-full outline-none border border-green-700 text-sm font-normal p-3 rounded-xl"
+                  placeholder="phoneNumber"
+                />
+              </div>
               <div className="w-full flex flex-col items-start justify-center gap-2">
                 <p className="text-sm font-normal">
                   Address{" "}
@@ -931,13 +951,13 @@ const RequestForm = () => {
               </div>
               <div className="w-full flex flex-col items-start justify-center gap-2">
                 <p className="text-sm font-normal">
-                  School Name{" "}
+                  Since Year{" "}
                   <span className="text-red-600 font-bold text-lg">*</span>
                 </p>
                 <input
                   type="text"
-                  name="schoolName"
-                  value={jobseekerData.schoolName}
+                  name="yearsLiving"
+                  value={jobseekerData.yearsLiving}
                   onChange={(e) =>
                     setJobseekerData({
                       ...jobseekerData,
@@ -945,24 +965,159 @@ const RequestForm = () => {
                     })
                   }
                   className="w-full outline-none border border-green-700 text-sm font-normal p-3 rounded-xl"
-                  placeholder="school name"
+                  placeholder="Since Year"
                 />
-                {/* <div className="w-full flex flex-col items-start justify-center gap-2">
-                  <p className="text-sm font-normal">Purpose</p>
-                  <input
-                    type="text"
-                    name="purpose"
-                    value={jobseekerData.purpose}
-                    onChange={(e) =>
-                      setJobseekerData({
-                        ...jobseekerData,
-                        [e.target.name]: e.target.value,
-                      })
-                    }
-                    className="w-full outline-none border border-green-700 text-sm font-normal p-3 rounded-xl"
-                    placeholder="purpose"
-                  />
-                </div> */}
+              </div>
+              <div className="w-full flex flex-col items-start justify-center gap-2">
+                <p className="text-sm font-normal">
+                  Age <span className="text-red-600 font-bold text-lg">*</span>
+                </p>
+                <input
+                  type="number"
+                  name="age"
+                  value={jobseekerData.age}
+                  onChange={(e) =>
+                    setJobseekerData({
+                      ...jobseekerData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
+                  className="w-full outline-none border border-green-700 text-sm font-normal p-3 rounded-xl"
+                  placeholder="age"
+                />
+              </div>
+              <div className="w-full flex flex-col items-start justify-center gap-2">
+                <p className="text-sm font-normal">
+                  Birthdate{" "}
+                  <span className="text-red-600 font-bold text-lg">*</span>
+                </p>
+                <input
+                  type="date"
+                  name="birthdate"
+                  value={jobseekerData.birthdate}
+                  onChange={(e) =>
+                    setJobseekerData({
+                      ...jobseekerData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
+                  className="w-full outline-none border border-green-700 text-sm font-normal p-3 rounded-xl"
+                  placeholder="birthdate"
+                />
+              </div>
+              <div className="w-full flex flex-col items-start justify-center gap-2">
+                <p className="text-sm font-normal">
+                  Gender{" "}
+                  <span className="text-red-600 font-bold text-lg">*</span>
+                </p>
+                <select
+                  name="gender"
+                  id="gender"
+                  value={jobseekerData.gender}
+                  className="w-full outline-none border border-green-700 text-sm font-normal p-3 rounded-xl"
+                  onChange={(e) =>
+                    setJobseekerData({
+                      ...jobseekerData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
+                >
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="others">Others</option>
+                </select>
+              </div>
+              <div className="w-full flex flex-col items-start justify-center gap-2">
+                <p className="text-sm font-normal">
+                  Civil Status{" "}
+                  <span className="text-red-600 font-bold text-lg">*</span>
+                </p>
+                <select
+                  name="status"
+                  id="status"
+                  value={jobseekerData.status}
+                  className="w-full outline-none border border-green-700 text-sm font-normal p-3 rounded-xl"
+                  onChange={(e) =>
+                    setJobseekerData({
+                      ...jobseekerData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
+                >
+                  <option value="">-- Pick Civil Status --</option>
+                  <option value="Single">Single</option>
+                  <option value="Married">Married</option>
+                  <option value="Widowed">Widowed</option>
+                  <option value="Divorced">Divorced</option>
+                  <option value="Separated">Separated</option>
+                </select>
+              </div>
+              <div className="w-full flex flex-col items-start justify-center gap-2">
+                <p className="text-sm font-normal">
+                  Course{" "}
+                  <span className="text-red-600 font-bold text-lg">*</span>
+                </p>
+                <input
+                  type="text"
+                  name="course"
+                  value={jobseekerData.course}
+                  onChange={(e) =>
+                    setJobseekerData({
+                      ...jobseekerData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
+                  className="w-full outline-none border border-green-700 text-sm font-normal p-3 rounded-xl"
+                  placeholder="course"
+                />
+              </div>
+              <div className="w-full flex flex-col items-start justify-center gap-2">
+                <p className="text-sm font-normal">
+                  Educational Attainment{" "}
+                  <span className="text-red-600 font-bold text-lg">*</span>
+                </p>
+
+                <select
+                  name="educationalAttainment"
+                  id="educationalAttainment"
+                  value={jobseekerData.educationalAttainment}
+                  className="w-full outline-none border border-green-700 text-sm font-normal p-3 rounded-xl"
+                  onChange={(e) =>
+                    setJobseekerData({
+                      ...jobseekerData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
+                >
+                  <option value="">-- Pick Educational Attainment --</option>
+                  <option value="Elementary Level">Elementary Level</option>
+                  <option value="Elementary Graduate">
+                    Elementary Graduate
+                  </option>
+
+                  <option value="High School Level">High School Level</option>
+                  <option value="High School Graduate">
+                    High School Graduate
+                  </option>
+
+                  <option value="Senior High School Level">
+                    Senior High School Level
+                  </option>
+                  <option value="Senior High School Graduate">
+                    Senior High School Graduate
+                  </option>
+
+                  <option value="College Level">College Level</option>
+                  <option value="College Graduate">College Graduate</option>
+
+                  <option value="Vocational / Technical">
+                    Vocational / Technical
+                  </option>
+
+                  <option value="Post-Graduate Studies">
+                    Post-Graduate Studies
+                  </option>
+                </select>
               </div>
             </div>
           ) : null}

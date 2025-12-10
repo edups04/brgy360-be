@@ -131,10 +131,21 @@ const CompletionForm = ({
           `${data.data.firstName} ${data.data.middleName} ${data.data.lastName}`
         );
       form.getTextField("address")?.setText(data.data.address);
-      form.getTextField("honorifics")?.setText(data.data.honorifics);
-      form.getTextField("schoolName")?.setText(data.data.schoolName);
-      form.getTextField("purpose")?.setText(data.data.fullName);
-      form.getTextField("dateRequested")?.setText(formattedDate);
+
+      form.getTextField("birthdate")?.setText(data.data.birthdate);
+      form.getTextField("age")?.setText(data.data.age + "");
+      form.getTextField("yearsLiving")?.setText(data.data.yearsLiving);
+      form.getTextField("phoneNumber")?.setText(data.data.phoneNumber);
+      form.getTextField("gender")?.setText(data.data.gender);
+      form.getTextField("status")?.setText(data.data.status);
+      form
+        .getTextField("educationalAttainment")
+        ?.setText(data.data.educationalAttainment);
+      form.getTextField("course")?.setText(data.data.course);
+
+      if (data.status === "approved" || data.status === "completed") {
+        form.getTextField("dateRequested")?.setText(formattedDate);
+      }
     }
 
     try {
@@ -292,10 +303,21 @@ const CompletionForm = ({
           `${data.data.firstName} ${data.data.middleName} ${data.data.lastName}`
         );
       form.getTextField("address")?.setText(data.data.address);
-      form.getTextField("honorifics")?.setText(data.data.honorifics);
-      form.getTextField("schoolName")?.setText(data.data.schoolName);
-      form.getTextField("purpose")?.setText(data.data.fullName);
-      form.getTextField("dateRequested")?.setText(formattedDate);
+
+      form.getTextField("birthdate")?.setText(data.data.birthdate);
+      form.getTextField("age")?.setText(data.data.age + "");
+      form.getTextField("yearsLiving")?.setText(data.data.yearsLiving);
+      form.getTextField("phoneNumber")?.setText(data.data.phoneNumber);
+      form.getTextField("gender")?.setText(data.data.gender);
+      form.getTextField("status")?.setText(data.data.status);
+      form
+        .getTextField("educationalAttainment")
+        ?.setText(data.data.educationalAttainment);
+      form.getTextField("course")?.setText(data.data.course);
+
+      if (data.status === "approved" || data.status === "completed") {
+        form.getTextField("dateRequested")?.setText(formattedDate);
+      }
     }
 
     try {
