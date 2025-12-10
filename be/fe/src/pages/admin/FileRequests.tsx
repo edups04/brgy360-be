@@ -125,7 +125,6 @@ const FileRequests = () => {
       form.getTextField("placeOfBirth")?.setText(data.data.placeOfBirth);
       form.getTextField("birthdate")?.setText(data.data.birthdate);
       form.getTextField("purpose")?.setText(data.data.purpose);
-      form.getTextField("dateRequested")?.setText(formattedDate);
       form
         .getTextField("noDerogatoryRecord")
         ?.setText(data.data.noDerogatoryRecord);
@@ -140,7 +139,10 @@ const FileRequests = () => {
         2,
         "0"
       )}-${validUntilDate.getFullYear()}`;
-      form.getTextField("validUntil")?.setText(validUntil);
+      if (data.status === "approved" || data.status === "completed") {
+        form.getTextField("dateRequested")?.setText(formattedDate);
+        form.getTextField("validUntil")?.setText(validUntil);
+      }
       // form
       //   .getTextField("requestNumber")
       //   ?.setText(data.residentCertificateNumber.toString());
@@ -168,8 +170,11 @@ const FileRequests = () => {
           `${data.data.firstName} ${data.data.middleName} ${data.data.lastName}`
         );
       form.getTextField("address")?.setText(data.data.address);
-      form.getTextField("purpose")?.setText(data.data.purpose);
-      form.getTextField("dateRequested")?.setText(formattedDate);
+      form.getTextField("yearsLiving")?.setText(data.data.yearsLiving);
+      form.getTextField("gender")?.setText(data.data.gender);
+      if (data.status === "approved" || data.status === "completed") {
+        form.getTextField("dateRequested")?.setText(formattedDate);
+      }
     } else if (data.requestedDocumentType === "first-time-job-seeker") {
       form
         .getTextField("fullName")
@@ -177,10 +182,21 @@ const FileRequests = () => {
           `${data.data.firstName} ${data.data.middleName} ${data.data.lastName}`
         );
       form.getTextField("address")?.setText(data.data.address);
-      form.getTextField("honorifics")?.setText(data.data.honorifics);
-      form.getTextField("schoolName")?.setText(data.data.schoolName);
-      form.getTextField("purpose")?.setText(data.data.fullName);
-      form.getTextField("dateRequested")?.setText(formattedDate);
+      
+      form.getTextField("birthdate")?.setText(data.data.birthdate);
+      form.getTextField("age")?.setText(data.data.age + "");
+      form.getTextField("yearsLiving")?.setText(data.data.yearsLiving);
+      form.getTextField("phoneNumber")?.setText(data.data.phoneNumber);
+      form.getTextField("gender")?.setText(data.data.gender);
+      form.getTextField("status")?.setText(data.data.status);
+      form
+        .getTextField("educationalAttainment")
+        ?.setText(data.data.educationalAttainment);
+      form.getTextField("course")?.setText(data.data.course);
+
+      if (data.status === "approved" || data.status === "completed") {
+        form.getTextField("dateRequested")?.setText(formattedDate);
+      }
     }
 
     try {
