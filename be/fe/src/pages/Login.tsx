@@ -17,12 +17,11 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
 
-  // NEW: loading state
   const [loading, setLoading] = useState(false);
 
   const onLogin = async () => {
     try {
-      setLoading(true); // start loading
+      setLoading(true);
       let url = `${BACKEND_API}/users/login`;
 
       let response = await axios.post(url, {
@@ -53,7 +52,7 @@ const Login = () => {
       setError(true);
       setMessage(error.response.data.message);
     } finally {
-      setLoading(false); // stop loading
+      setLoading(false);
     }
   };
 
@@ -119,14 +118,14 @@ const Login = () => {
                 />
                 {showPassword ? (
                   <RiEyeLine
-                    className="absolute right-4 cursor-pointer"
+                    className="absolute right-4 cursor-pointer transition duration-300 ease-in-out hover:text-green-700"
                     size={12}
                     color="black"
                     onClick={() => setShowPassword(!showPassword)}
                   />
                 ) : (
                   <RiEyeCloseLine
-                    className="absolute right-4 cursor-pointer"
+                    className="absolute right-4 cursor-pointer transition duration-300 ease-in-out hover:text-green-700"
                     size={12}
                     color="black"
                     onClick={() => setShowPassword(!showPassword)}
@@ -140,14 +139,14 @@ const Login = () => {
             <div className="w-1/2 flex flex-row items-center justify-start gap-2">
               {remember ? (
                 <div
-                  className="w-3 h-3 rounded-sm outline outline-[#008A3D] bg-[#008A3D] cursor-pointer"
+                  className="w-3 h-3 rounded-sm outline outline-[#008A3D] bg-[#008A3D] cursor-pointer transition duration-300 ease-in-out hover:bg-green-700"
                   onClick={() => setRemember(!remember)}
                 >
                   <RiCheckLine size={12} color="white" />
                 </div>
               ) : (
                 <div
-                  className="w-3 h-3 rounded-sm outline outline-[#008A3D] cursor-pointer"
+                  className="w-3 h-3 rounded-sm outline outline-[#008A3D] cursor-pointer transition duration-300 ease-in-out hover:bg-green-700"
                   onClick={() => {
                     setRemember(!remember);
                   }}
@@ -157,7 +156,7 @@ const Login = () => {
             </div>
             <div className="w-1/2 flex flex-row items-center justify-end gap-2">
               <p
-                className="text-sm font-normal text-green-600 cursor-pointer"
+                className="text-sm font-normal text-green-600 cursor-pointer transition duration-300 ease-in-out hover:text-green-700"
                 onClick={onForgotPassword}
               >
                 Forgot Password
@@ -166,7 +165,7 @@ const Login = () => {
           </div>
           {/* button with indicator */}
           <div
-            className={`w-full flex items-center justify-center bg-[#008A3D] py-3 rounded-xl text-white text-sm font-normal cursor-pointer ${
+            className={`w-full flex items-center justify-center bg-[#008A3D] py-3 rounded-xl text-white text-sm font-normal cursor-pointer transition duration-300 ease-in-out hover:bg-green-700 hover:scale-105 ${
               loading ? "opacity-70 cursor-not-allowed" : ""
             }`}
             onClick={!loading ? onLogin : undefined}
@@ -203,14 +202,14 @@ const Login = () => {
           <p className="w-full flex flex-row items-center justify-center gap-1 text-sm font-normal whitespace-nowrap">
             Sign up as
             <span
-              className="cursor-pointer text-[#008A3D]"
+              className="cursor-pointer text-[#008A3D] transition duration-300 ease-in-out hover:text-green-700"
               onClick={() => navigate("/register/admin")}
             >
               Admin
             </span>
             <span className="">or</span>
             <span
-              className="cursor-pointer text-[#008A3D]"
+              className="cursor-pointer text-[#008A3D] transition duration-300 ease-in-out hover:text-green-700"
               onClick={() => navigate("/register/user")}
             >
               User

@@ -20,9 +20,11 @@ const FileRequest = () => {
               choose from the available documents
             </p>
           </div>
+          {/* document cards */}
           <div className="min-h-[80vh] w-full flex flex-col lg:flex-row items-center justify-center gap-4">
             <div
-              className="w-full lg:w-1/4 flex flex-col items-center justify-center gap-4 cursor-pointer"
+              className="w-full lg:w-1/4 flex flex-col items-center justify-center gap-4 cursor-pointer 
+                         transition duration-300 ease-in-out hover:scale-105"
               onClick={() =>
                 navigate("/user/request/form", { state: "barangay-clearance" })
               }
@@ -38,8 +40,10 @@ const FileRequest = () => {
                 Barangay Clearance
               </p>
             </div>
+
             <div
-              className="w-full lg:w-1/4 flex flex-col items-center justify-center gap-4 cursor-pointer"
+              className="w-full lg:w-1/4 flex flex-col items-center justify-center gap-4 cursor-pointer 
+                         transition duration-300 ease-in-out hover:scale-105"
               onClick={() =>
                 navigate("/user/request/form", { state: "barangay-indigency" })
               }
@@ -55,8 +59,10 @@ const FileRequest = () => {
                 Barangay Indigency
               </p>
             </div>
+
             <div
-              className="w-full lg:w-1/4 flex flex-col items-center justify-center gap-4 cursor-pointer"
+              className="w-full lg:w-1/4 flex flex-col items-center justify-center gap-4 cursor-pointer 
+                         transition duration-300 ease-in-out hover:scale-105"
               onClick={() =>
                 navigate("/user/request/form", {
                   state: "certificate-of-residency",
@@ -74,8 +80,10 @@ const FileRequest = () => {
                 Certificate of Residency
               </p>
             </div>
+
             <div
-              className="w-full lg:w-1/4 flex flex-col items-center justify-center gap-4 cursor-pointer"
+              className="w-full lg:w-1/4 flex flex-col items-center justify-center gap-4 cursor-pointer 
+                         transition duration-300 ease-in-out hover:scale-105"
               onClick={() =>
                 navigate("/user/request/form", {
                   state: "first-time-job-seeker",
@@ -94,9 +102,12 @@ const FileRequest = () => {
               </p>
             </div>
           </div>
+
+          {/* button */}
           <div className="w-full flex flex-row items-center justify-end gap-2">
             <button
-              className="flex flex-row gap-2 text-sm font-normal text-white bg-green-700 p-3 rounded-xl"
+              className="flex flex-row gap-2 text-sm font-normal text-white bg-green-700 p-3 rounded-xl 
+                         transition duration-300 ease-in-out hover:bg-green-800 hover:scale-105"
               onClick={() => navigate("/user/request/history")}
             >
               <RiTimelineView size={16} />

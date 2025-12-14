@@ -12,7 +12,6 @@ const EditBudgets = () => {
   const navigate = useNavigate();
   const [file, setFile] = useState<any | null>(null);
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
   const [postModal, showPostModal] = useState(false);
   const [modal, showModal] = useState(false);
   const [message, setMessage] = useState("");
@@ -35,8 +34,6 @@ const EditBudgets = () => {
     const getData = async () => {
       try {
         let url = `${BACKEND_API}/budgets/${state}`;
-        // let url = `http://localhost:8080/api/budgets/${state}`;
-
         let response = await axios.get(url);
 
         if ((response.data.success = true)) {
@@ -44,7 +41,6 @@ const EditBudgets = () => {
           const yearOnly = new Date(response.data.data.date).getFullYear();
           setCurrentDate(yearOnly);
           setBudgetYear(yearOnly);
-
           setFile(response.data.data.file);
         }
       } catch (error: any) {
@@ -60,14 +56,11 @@ const EditBudgets = () => {
         if (currUser) {
           try {
             let url = `${BACKEND_API}/users/${currUser._id}`;
-            // let url = `http://localhost:8080/api/users/${currUser._id}`;
-
             let response = await axios.get(url);
 
             if (response.data.success === true) {
               setBarangayId(response.data.data.barangayId);
               await getBudgets(year, response.data.data.barangayId);
-              console.log(years);
             }
           } catch (error: any) {
             console.log(error.response.data);
@@ -97,8 +90,6 @@ const EditBudgets = () => {
       if (currUser) {
         try {
           let url = `${BACKEND_API}/users/${currUser._id}`;
-          // let url = `http://localhost:8080/api/users/${currUser._id}`;
-
           let response = await axios.get(url);
 
           if (response.data.success === true) {
@@ -106,7 +97,6 @@ const EditBudgets = () => {
 
             try {
               let url = `${BACKEND_API}/budgets/${state}`;
-              // let url = `http://localhost:8080/api/budgets/${state}`;
 
               const formData = new FormData();
               formData.append("title", title);
@@ -115,13 +105,9 @@ const EditBudgets = () => {
 
               if (!fileChanged) {
                 if (file !== "N/A") {
-                  let url = `${BACKEND_API}/files/${encodeURIComponent(
-                    file
-                  )}`;
-
+                  let url = `${BACKEND_API}/files/${encodeURIComponent(file)}`;
                   const response = await fetch(url);
                   const blob = await response.blob();
-
                   formData.append("file", blob, file);
                 } else {
                   formData.append("file", "");
@@ -165,14 +151,14 @@ const EditBudgets = () => {
             <RiArrowLeftSLine
               size={24}
               color="black"
-              className="cursor-pointer"
+              className="cursor-pointer transition duration-300 ease-in-out hover:text-green-800 hover:scale-110"
               onClick={() => navigate("/admin/transparency/budgets")}
             />
             <p className="text-sm font-semibold text-green-700">
               Budget Overview
             </p>
           </div>
-          {/* image */}
+          {/* file preview */}
           <div className="w-full h-[240px] lg:h-[660px] bg-gray-200 flex items-center justify-center rounded-xl overflow-hidden relative">
             {file && (
               <iframe
@@ -185,7 +171,7 @@ const EditBudgets = () => {
                 className="border rounded w-full h-full"
               />
             )}
-            <label className="absolute bottom-4 right-4 p-3 rounded-xl bg-white cursor-pointer">
+            <label className="absolute bottom-4 right-4 p-3 rounded-xl bg-white cursor-pointer transition duration-300 ease-in-out hover:bg-gray-300">
               <RiAddLine size={16} color="black" />
               <input
                 type="file"
@@ -200,11 +186,8 @@ const EditBudgets = () => {
             <div className="w-full flex flex-col items-start justify-center gap-2">
               <p className="text-sm font-normal">Year</p>
               <select
-                className="w-full p-3 rounded-xl outline-none border border-green-700 text-sm font-normal"
-                onChange={(e) => {
-                  setBudgetYear(e.target.value);
-                  console.log(e.target.value);
-                }}
+                className="w-full p-3 rounded-xl outline-none border border-green-700 text-sm font-normal focus:border-green-800"
+                onChange={(e) => setBudgetYear(e.target.value)}
                 value={budgetYear}
               >
                 <option value="" disabled>
@@ -224,7 +207,7 @@ const EditBudgets = () => {
               <input
                 type="text"
                 placeholder="header or title"
-                className="outline-none text-sm font-normal capitalize p-3 border border-green-700 rounded-xl w-full"
+                className="outline-none text-sm font-normal capitalize p-3 border border-green-700 rounded-xl w-full focus:border-green-800"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
@@ -233,10 +216,10 @@ const EditBudgets = () => {
           {/* button */}
           <div className="w-full flex flex-row items-center justify-end">
             <div
-              className="p-3 rounded-xl bg-green-700 text-white text-sm font-normal cursor-pointer"
+              className="p-3 rounded-xl bg-green-700 text-white text-sm font-normal cursor-pointer transition duration-300 ease-in-out hover:bg-green-800 hover:scale-105"
               onClick={() => showPostModal(true)}
             >
-              Post Budget
+              Update Budget
             </div>
           </div>
         </div>

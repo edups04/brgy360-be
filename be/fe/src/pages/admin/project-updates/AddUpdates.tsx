@@ -97,23 +97,24 @@ const AddUpdates = () => {
             <RiArrowLeftSLine
               size={24}
               color="black"
-              className="cursor-pointer"
+              className="cursor-pointer transition duration-300 ease-in-out hover:text-green-800 hover:scale-110"
               onClick={() => navigate("/admin/transparency/updates")}
             />
             <p className="text-sm font-semibold text-green-700">
               Project Updates
             </p>
           </div>
+
           {/* image */}
           <div className="w-full max-w-[50%] h-[240px] lg:h-[660px] bg-gray-200 flex items-center justify-center rounded-xl overflow-hidden relative">
             {image && (
               <img
                 src={URL.createObjectURL(image)}
                 alt="preview"
-                className="h-full w-full object-cover object-center"
+                className="h-full w-full object-cover object-center transition duration-300 ease-in-out hover:scale-105"
               />
             )}
-            <label className="absolute bottom-4 right-4 p-3 rounded-xl bg-white cursor-pointer">
+            <label className="absolute bottom-4 right-4 p-3 rounded-xl bg-white cursor-pointer transition duration-300 ease-in-out hover:bg-gray-300">
               <RiAddLine size={16} color="black" />
               <input
                 type="file"
@@ -123,6 +124,7 @@ const AddUpdates = () => {
               />
             </label>
           </div>
+
           {/* text */}
           <div className="w-full flex flex-col items-center justify-center gap-4">
             {/* title */}
@@ -131,11 +133,12 @@ const AddUpdates = () => {
               <input
                 type="text"
                 placeholder="header or title"
-                className="outline-none text-sm font-normal capitalize p-3 border border-green-700 rounded-xl w-full"
+                className="outline-none text-sm font-normal capitalize p-3 border border-green-700 rounded-xl w-full focus:border-green-800 transition duration-200 ease-in-out"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
             </div>
+
             {/* content */}
             <div className="w-full flex flex-col items-start justify-center gap-2">
               <p className="text-sm font-normal">Content</p>
@@ -144,15 +147,16 @@ const AddUpdates = () => {
                 onInput={handleInput}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                className="outline-none w-full text-sm font-normal p-3 rounded-xl border border-green-700 resize-none overflow-hidden"
+                className="outline-none w-full text-sm font-normal p-3 rounded-xl border border-green-700 resize-none overflow-hidden focus:border-green-800 transition duration-200 ease-in-out"
                 placeholder="add contents"
               ></textarea>
             </div>
           </div>
+
           {/* button */}
           <div className="w-full flex flex-row items-center justify-end">
             <div
-              className="p-3 rounded-xl bg-green-700 text-white text-sm font-normal cursor-pointer"
+              className="p-3 rounded-xl bg-green-700 text-white text-sm font-normal cursor-pointer transition duration-300 ease-in-out hover:bg-green-800 hover:scale-105"
               onClick={() => showPostModal(true)}
             >
               Post Updates
@@ -161,6 +165,7 @@ const AddUpdates = () => {
         </div>
         <div className="w-full h-[10vh] lg:hidden"></div>
       </div>
+
       {postModal && (
         <PostModal
           onClose={() => showPostModal(false)}

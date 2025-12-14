@@ -42,7 +42,8 @@ const ProjectUpdates = () => {
               {recentUpdates.length > 0 ? (
                 recentUpdates.map((recentUpdate: any) => (
                   <div
-                    className="w-full bg-gray-200 h-[320px] lg:h-[620px] rounded-xl flex items-end justify-center overflow-hidden cursor-pointer bg-cover bg-center"
+                    className="w-full bg-gray-200 h-[320px] lg:h-[620px] rounded-xl flex items-end justify-center overflow-hidden cursor-pointer bg-cover bg-center 
+                               transition duration-300 ease-in-out hover:scale-105"
                     onClick={() =>
                       navigate("/user/transparency/updates/view", {
                         state: recentUpdate._id,
@@ -104,7 +105,8 @@ const ProjectUpdates = () => {
             {updates.length > 0
               ? updates.map((update: any) => (
                   <div
-                    className="w-full flex flex-col items-start justify-center p-3 gap-2 cursor-pointer border-b border-black/5"
+                    className="w-full flex flex-col items-start justify-center p-3 gap-2 cursor-pointer border-b border-black/5 
+                               transition duration-300 ease-in-out hover:bg-green-50 hover:scale-[1.02]"
                     onClick={() =>
                       navigate("/user/transparency/updates/view", {
                         state: update._id,
@@ -140,7 +142,7 @@ const ProjectUpdates = () => {
                 .map((pageNumber) => (
                   <p
                     key={pageNumber}
-                    className={`cursor-pointer ${
+                    className={`cursor-pointer transition duration-300 ease-in-out hover:scale-110 ${
                       page === pageNumber
                         ? "font-semibold text-sm text-green-700"
                         : "font-normal text-sm text-green-700"

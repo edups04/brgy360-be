@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import UserTransparency from "../../components/UserTransparency";
 import UserNavbar from "../../components/UserNavbar";
-import { useUpdates } from "../../providers/UpdatesProvider";
 import { useNavigate } from "react-router-dom";
 import { RiCalendarLine, RiEmotionUnhappyLine } from "react-icons/ri";
 import { useAchievements } from "../../providers/AchievementsProvider";
@@ -48,7 +47,8 @@ const Achievements = () => {
               {recentAchievements.length > 0 ? (
                 recentAchievements.map((recentAchievement: any) => (
                   <div
-                    className="w-full bg-gray-200 h-[320px] lg:h-[620px] rounded-xl flex items-end justify-center overflow-hidden cursor-pointer bg-cover bg-center"
+                    className="w-full bg-gray-200 h-[320px] lg:h-[620px] rounded-xl flex items-end justify-center overflow-hidden cursor-pointer bg-cover bg-center 
+                               transition duration-300 ease-in-out hover:scale-105"
                     onClick={() =>
                       navigate("/user/transparency/achievements/view", {
                         state: recentAchievement._id,
@@ -100,17 +100,18 @@ const Achievements = () => {
               )}
             </div>
           </div>
-          {/* * MORE ACHIEVEMENTS */}
+          {/* MORE ACHIEVEMENTS */}
           <div className="w-full lg:w-1/4 flex flex-col items-center justify-center gap-4">
             {/* header */}
             <div className="w-full flex items-center justify-start bg-green-700 p-3 text-lg font-normal text-white rounded-xl">
               More Accomplishments
             </div>
-            {/* news */}
+            {/* list */}
             {achievements.length > 0
               ? achievements.map((achievement: any) => (
                   <div
-                    className="w-full flex flex-col items-start justify-center p-3 gap-2 cursor-pointer border-b border-black/5"
+                    className="w-full flex flex-col items-start justify-center p-3 gap-2 cursor-pointer border-b border-black/5 
+                               transition duration-300 ease-in-out hover:bg-green-50 hover:scale-[1.02]"
                     onClick={() =>
                       navigate("/user/transparency/achievements/view", {
                         state: achievement._id,
@@ -149,7 +150,7 @@ const Achievements = () => {
                 .map((pageNumber) => (
                   <p
                     key={pageNumber}
-                    className={`cursor-pointer ${
+                    className={`cursor-pointer transition duration-300 ease-in-out hover:scale-110 ${
                       page === pageNumber
                         ? "font-semibold text-sm text-green-700"
                         : "font-normal text-sm text-green-700"

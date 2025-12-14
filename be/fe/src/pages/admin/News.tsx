@@ -38,8 +38,6 @@ const News = () => {
     if (newsId) {
       try {
         let url = `${BACKEND_API}/news-announcements/${newsId}`;
-        // let url = `http://localhost:8080/api/news-announcements/${newsId}`;
-
         let response = await axios.delete(url);
 
         if (response.data.success === true) {
@@ -65,8 +63,6 @@ const News = () => {
       if (currUser) {
         try {
           let url = `${BACKEND_API}/users/${currUser._id}`;
-          // let url = `http://localhost:8080/api/users/${currUser._id}`;
-
           let response = await axios.get(url);
 
           if (response.data.success === true) {
@@ -102,7 +98,7 @@ const News = () => {
             <div className="w-3/4 lg:w-2/4 relative flex items-center justify-center">
               <input
                 type="text"
-                className="outline-none border border-green-700 text-sm font-normal w-full pl-10 pr-3 py-3 rounded-xl"
+                className="outline-none border border-green-700 text-sm font-normal w-full pl-10 pr-3 py-3 rounded-xl focus:border-green-800 transition duration-200 ease-in-out"
                 placeholder="search for news and announcements"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -114,7 +110,7 @@ const News = () => {
               />
             </div>
             <div
-              className="flex items-center justify-center cursor-pointer text-sm font-normal text-white bg-green-700 p-3 rounded-xl"
+              className="flex items-center justify-center cursor-pointer text-sm font-normal text-white bg-green-700 p-3 rounded-xl transition duration-300 ease-in-out hover:bg-green-800 hover:scale-105"
               onClick={() => navigate("/admin/news/add")}
             >
               Add New
@@ -129,13 +125,13 @@ const News = () => {
             {news.length > 0 ? (
               news.map((news: any) => (
                 <div
-                  className="w-full flex flex-col items-center justify-center p-6 rounded-xl shadow-xl shadow-black/10"
+                  className="w-full flex flex-col items-center justify-center p-6 rounded-xl shadow-xl shadow-black/10 transition duration-300 ease-in-out hover:shadow-green-200"
                   key={news._id}
                 >
                   <div className="w-full flex-col flex lg:flex-row items-center justify-between">
                     <div className="w-full lg:w-2/3 flex flex-row items-center justify-start gap-2">
                       <div
-                        className="w-[60px] h-[60px] rounded-full bg-gray-200 shrink-0 bg-cover bg-center"
+                        className="w-[60px] h-[60px] rounded-full bg-gray-200 shrink-0 bg-cover bg-center transition duration-300 ease-in-out hover:scale-105"
                         style={{
                           backgroundImage:
                             news.image !== "N/A"
@@ -146,7 +142,7 @@ const News = () => {
                         }}
                       ></div>
                       <div className="flex flex-col items-start justify-center gap-2">
-                        <p className="line-clamp-1 text-sm font-normal cursor-pointer">
+                        <p className="line-clamp-1 text-sm font-normal cursor-pointer hover:text-green-800 transition duration-200 ease-in-out">
                           {news.title}
                         </p>
                         <div className="w-full flex flex-row items-center justify-start gap-1">
@@ -163,7 +159,7 @@ const News = () => {
                     </div>
                     <div className="w-full lg:w-1/2 flex flex-row items-center justify-end gap-2">
                       <div
-                        className="p-3 rounded-xl bg-green-700 text-white cursor-pointer"
+                        className="p-3 rounded-xl bg-green-700 text-white cursor-pointer transition duration-300 ease-in-out hover:bg-green-800 hover:scale-105"
                         onClick={() =>
                           navigate("/admin/news/edit", { state: news._id })
                         }
@@ -171,7 +167,7 @@ const News = () => {
                         <RiEditLine size={16} />
                       </div>
                       <div
-                        className="p-3 rounded-xl bg-red-700 text-white cursor-pointer"
+                        className="p-3 rounded-xl bg-red-700 text-white cursor-pointer transition duration-300 ease-in-out hover:bg-red-800 hover:scale-105"
                         onClick={() => {
                           showDeleteModal(true);
                           setSelectedNews(news._id);
@@ -204,7 +200,7 @@ const News = () => {
               .map((pageNumber) => (
                 <p
                   key={pageNumber}
-                  className={`cursor-pointer ${
+                  className={`cursor-pointer transition duration-200 ease-in-out hover:text-green-800 ${
                     page === pageNumber
                       ? "font-semibold text-sm text-green-700"
                       : "font-normal text-sm text-green-700"

@@ -47,11 +47,9 @@ const News = () => {
             {recentNews.length > 0 ? (
               recentNews.map((recentNews: any) => (
                 <div
-                  className="w-full bg-gray-200 h-[320px] lg:h-[620px] rounded-xl flex items-end justify-center overflow-hidden cursor-pointer bg-cover bg-center"
-                  onClick={
-                    () => navigate("/user/news/all", { state: recentNews })
-                    // navigate("/user/news/view", { state: recentNews._id })
-                  }
+                  className="w-full bg-gray-200 h-[320px] lg:h-[620px] rounded-xl flex items-end justify-center overflow-hidden cursor-pointer bg-cover bg-center 
+                             transition duration-300 ease-in-out hover:scale-105"
+                  onClick={() => navigate("/user/news/all", { state: recentNews })}
                   style={{
                     backgroundImage:
                       recentNews.image !== "N/A"
@@ -98,7 +96,8 @@ const News = () => {
           {recentNews.length > 0 ? (
             <div className="w-full flex flex-row items-center justify-end">
               <div
-                className="p-3 rounded-xl bg-green-700 text-sm font-normal text-white cursor-pointer"
+                className="p-3 rounded-xl bg-green-700 text-sm font-normal text-white cursor-pointer 
+                           transition duration-300 ease-in-out hover:bg-green-800 hover:scale-105"
                 onClick={() => navigate("/user/news/all")}
               >
                 View All

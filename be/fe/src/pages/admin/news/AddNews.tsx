@@ -3,7 +3,6 @@ import AdminNavbar from "../../../components/AdminNavbar";
 import { RiAddLine, RiArrowLeftSLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import PostModa from "../../../components/PostModal";
 import Modal from "../../../components/Modal";
 import PostModal from "../../../components/PostModal";
 import BACKEND_API from "../../../utils/API";
@@ -30,7 +29,7 @@ const AddNews = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImage(file); // Store the file itself
+      setImage(file);
     }
   };
 
@@ -43,19 +42,14 @@ const AddNews = () => {
       if (currUser) {
         try {
           let url = `${BACKEND_API}/users/${currUser._id}`;
-          // let url = `http://localhost:8080/api/users/${currUser._id}`;
-
           let response = await axios.get(url);
 
           if (response.data.success === true) {
             const barangayId = response.data.data.barangayId;
-            // const currentDate = new Date().toISOString().split("T")[0];
-            const currentDate = new Date().toISOString(); // e.g., '2025-05-19T12:34:56.789Z'
+            const currentDate = new Date().toISOString();
 
             try {
-              let url =
-                `${BACKEND_API}/news-announcements`;
-              // let url = "http://localhost:8080/api/news-announcements";
+              let url = `${BACKEND_API}/news-announcements`;
 
               const formData = new FormData();
               formData.append("title", title);
@@ -99,7 +93,7 @@ const AddNews = () => {
             <RiArrowLeftSLine
               size={24}
               color="black"
-              className="cursor-pointer"
+              className="cursor-pointer transition duration-300 ease-in-out hover:text-green-800 hover:scale-110"
               onClick={() => navigate("/admin/news")}
             />
             <p className="text-sm font-semibold text-green-700">
@@ -115,7 +109,7 @@ const AddNews = () => {
                 className="h-full w-full object-cover object-center"
               />
             )}
-            <label className="absolute bottom-4 right-4 p-3 rounded-xl bg-white cursor-pointer">
+            <label className="absolute bottom-4 right-4 p-3 rounded-xl bg-white cursor-pointer transition duration-300 ease-in-out hover:bg-gray-300">
               <RiAddLine size={16} color="black" />
               <input
                 type="file"
@@ -133,7 +127,7 @@ const AddNews = () => {
               <input
                 type="text"
                 placeholder="header or title"
-                className="outline-none text-sm font-normal capitalize p-3 border border-green-700 rounded-xl w-full"
+                className="outline-none text-sm font-normal capitalize p-3 border border-green-700 rounded-xl w-full focus:border-green-800"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
@@ -146,7 +140,7 @@ const AddNews = () => {
                 onInput={handleInput}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                className="outline-none w-full text-sm font-normal p-3 rounded-xl border border-green-700 resize-none overflow-hidden"
+                className="outline-none w-full text-sm font-normal p-3 rounded-xl border border-green-700 resize-none overflow-hidden focus:border-green-800"
                 placeholder="add contents for the news or announcement"
               ></textarea>
             </div>
@@ -154,7 +148,7 @@ const AddNews = () => {
           {/* button */}
           <div className="w-full flex flex-row items-center justify-end">
             <div
-              className="p-3 rounded-xl bg-green-700 text-white text-sm font-normal cursor-pointer"
+              className="p-3 rounded-xl bg-green-700 text-white text-sm font-normal cursor-pointer transition duration-300 ease-in-out hover:bg-green-800 hover:scale-105"
               onClick={() => showPostModal(true)}
             >
               Post News

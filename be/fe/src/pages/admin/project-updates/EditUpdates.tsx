@@ -37,7 +37,7 @@ const EditUpdates = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImage(file); // Store the file itself
+      setImage(file);
       setImageChanged(true);
     }
   };
@@ -51,18 +51,14 @@ const EditUpdates = () => {
       if (currUser) {
         try {
           let url = `${BACKEND_API}/users/${currUser._id}`;
-          // let url = `http://localhost:8080/api/users/${currUser._id}`;
-
           let response = await axios.get(url);
 
           if (response.data.success === true) {
             const barangayId = response.data.data.barangayId;
-            // const currentDate = new Date().toISOString().split("T")[0];
             const currentDate = new Date().toISOString();
 
             try {
               let url = `${BACKEND_API}/projects/${state}`;
-              // let url = `http://localhost:8080/api/projects/${state}`;
 
               const formData = new FormData();
               formData.append("title", title);
@@ -71,13 +67,9 @@ const EditUpdates = () => {
               formData.append("date", currentDate);
 
               if (!imageChanged) {
-                let url = `${BACKEND_API}/images/${encodeURIComponent(
-                  image
-                )}`;
-
+                let url = `${BACKEND_API}/images/${encodeURIComponent(image)}`;
                 const response = await fetch(url);
                 const blob = await response.blob();
-
                 formData.append("image", blob, image);
               } else {
                 image && formData.append("image", image);
@@ -110,8 +102,6 @@ const EditUpdates = () => {
   const deleteUpdates = async () => {
     try {
       let url = `${BACKEND_API}/projects/${state}`;
-      // let url = `http://localhost:8080/api/projects/${state}`;
-
       let response = await axios.delete(url);
 
       if (response.data.success === true) {
@@ -131,8 +121,6 @@ const EditUpdates = () => {
     const getData = async () => {
       try {
         let url = `${BACKEND_API}/projects/${state}`;
-        // let url = `http://localhost:8080/api/projects/${state}`;
-
         let response = await axios.get(url);
 
         if ((response.data.success = true)) {
@@ -159,27 +147,28 @@ const EditUpdates = () => {
             <RiArrowLeftSLine
               size={24}
               color="black"
-              className="cursor-pointer"
+              className="cursor-pointer transition duration-300 ease-in-out hover:text-green-800 hover:scale-110"
               onClick={() => navigate("/admin/transparency/updates")}
             />
             <p className="text-sm font-semibold text-green-700">
               Project Updates
             </p>
           </div>
+
           {/* image */}
           <div className="w-full max-w-[50%] h-[240px] lg:h-[660px] bg-gray-200 flex items-center justify-center rounded-xl overflow-hidden relative">
             {image && (
               <img
                 src={
                   typeof image === "string"
-                    ? `${BACKEND_API}/images/${image}` // e.g., http://localhost:3000/uploads/${image}
+                    ? `${BACKEND_API}/images/${image}`
                     : URL.createObjectURL(image)
                 }
                 alt="preview"
-                className="h-full w-full object-cover object-center"
+                className="h-full w-full object-cover object-center transition duration-300 ease-in-out hover:scale-105"
               />
             )}
-            <label className="absolute bottom-4 right-4 p-3 rounded-xl bg-white cursor-pointer">
+            <label className="absolute bottom-4 right-4 p-3 rounded-xl bg-white cursor-pointer transition duration-300 ease-in-out hover:bg-gray-300">
               <RiAddLine size={16} color="black" />
               <input
                 type="file"
@@ -189,6 +178,7 @@ const EditUpdates = () => {
               />
             </label>
           </div>
+
           {/* text */}
           <div className="w-full flex flex-col items-center justify-center gap-4">
             {/* title */}
@@ -197,11 +187,12 @@ const EditUpdates = () => {
               <input
                 type="text"
                 placeholder="header or title"
-                className="outline-none text-sm font-normal capitalize p-3 border border-green-700 rounded-xl w-full"
+                className="outline-none text-sm font-normal capitalize p-3 border border-green-700 rounded-xl w-full focus:border-green-800 transition duration-200 ease-in-out"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
             </div>
+
             {/* content */}
             <div className="w-full flex flex-col items-start justify-center gap-2">
               <p className="text-sm font-normal">Content</p>
@@ -210,21 +201,22 @@ const EditUpdates = () => {
                 onInput={handleInput}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                className="outline-none w-full text-sm font-normal p-3 rounded-xl border border-green-700 resize-none overflow-hidden"
+                className="outline-none w-full text-sm font-normal p-3 rounded-xl border border-green-700 resize-none overflow-hidden focus:border-green-800 transition duration-200 ease-in-out"
                 placeholder="add contents for the project update"
               ></textarea>
             </div>
           </div>
-          {/* button */}
+
+          {/* buttons */}
           <div className="w-full flex flex-row items-center justify-end gap-2">
             <div
-              className="p-3 rounded-xl bg-red-700 text-white text-sm font-normal cursor-pointer"
+              className="p-3 rounded-xl bg-red-700 text-white text-sm font-normal cursor-pointer transition duration-300 ease-in-out hover:bg-red-800 hover:scale-105"
               onClick={() => showDeleteModal(true)}
             >
               Delete Updates
             </div>
             <div
-              className="p-3 rounded-xl bg-green-700 text-white text-sm font-normal cursor-pointer"
+              className="p-3 rounded-xl bg-green-700 text-white text-sm font-normal cursor-pointer transition duration-300 ease-in-out hover:bg-green-800 hover:scale-105"
               onClick={() => showPostModal(true)}
             >
               Update Updates
@@ -233,18 +225,21 @@ const EditUpdates = () => {
         </div>
         <div className="w-full h-[10vh] lg:hidden"></div>
       </div>
+
       {deleteModal && (
         <DeleteModal
           onDelete={() => deleteUpdates()}
           onClose={() => showDeleteModal(false)}
         />
       )}
+
       {postModal && (
         <PostModal
           onClose={() => showPostModal(false)}
           onPost={() => updateUpdates()}
         />
       )}
+
       {modal && (
         <Modal
           message={message}

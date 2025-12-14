@@ -19,8 +19,6 @@ const TransparencyDashboard = () => {
         if (currUser) {
           try {
             let url = `${BACKEND_API}/barangays/${currUser.barangayId}`;
-            // let url = `http://localhost:8080/api/barangays/${currUser.barangayId}`;
-
             let response = await axios.get(url);
 
             if (response.data.success === true) {
@@ -57,7 +55,7 @@ const TransparencyDashboard = () => {
             </p>
 
             <div
-              className="flex p-3 rounded-xl bg-green-700 text-white font-normal text-sm mt-6 cursor-pointer"
+              className="flex p-3 rounded-xl bg-green-700 text-white font-normal text-sm mt-6 cursor-pointer transition duration-300 ease-in-out hover:bg-green-800 hover:scale-105"
               onClick={() => navigate("/admin/transparency/updates")}
             >
               View More

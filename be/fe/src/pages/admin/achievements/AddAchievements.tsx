@@ -29,7 +29,7 @@ const AddAchievements = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImage(file); // Store the file itself
+      setImage(file);
     }
   };
 
@@ -42,20 +42,14 @@ const AddAchievements = () => {
       if (currUser) {
         try {
           let url = `${BACKEND_API}/users/${currUser._id}`;
-          // let url = `http://localhost:8080/api/users/${currUser._id}`;
-
           let response = await axios.get(url);
 
           if (response.data.success === true) {
             const barangayId = response.data.data.barangayId;
-            // const currentDate = new Date().toISOString().split("T")[0];
             const currentDate = new Date().toISOString();
 
             try {
-              let url =
-                `${BACKEND_API}/accomplishments-achievements`;
-              // let url =
-              //   "http://localhost:8080/api/accomplishments-achievements";
+              let url = `${BACKEND_API}/accomplishments-achievements`;
 
               const formData = new FormData();
               formData.append("title", title);
@@ -99,7 +93,7 @@ const AddAchievements = () => {
             <RiArrowLeftSLine
               size={24}
               color="black"
-              className="cursor-pointer"
+              className="cursor-pointer transition duration-300 ease-in-out hover:text-green-800 hover:scale-110"
               onClick={() => navigate("/admin/transparency/achievements")}
             />
             <p className="text-sm font-semibold text-green-700">
@@ -115,7 +109,7 @@ const AddAchievements = () => {
                 className="h-full w-full object-cover object-center"
               />
             )}
-            <label className="absolute bottom-4 right-4 p-3 rounded-xl bg-white cursor-pointer">
+            <label className="absolute bottom-4 right-4 p-3 rounded-xl bg-white cursor-pointer transition duration-300 ease-in-out hover:bg-gray-300">
               <RiAddLine size={16} color="black" />
               <input
                 type="file"
@@ -154,7 +148,7 @@ const AddAchievements = () => {
           {/* button */}
           <div className="w-full flex flex-row items-center justify-end">
             <div
-              className="p-3 rounded-xl bg-green-700 text-white text-sm font-normal cursor-pointer"
+              className="p-3 rounded-xl bg-green-700 text-white text-sm font-normal cursor-pointer transition duration-300 ease-in-out hover:bg-green-800 hover:scale-105"
               onClick={() => showPostModal(true)}
             >
               Post News

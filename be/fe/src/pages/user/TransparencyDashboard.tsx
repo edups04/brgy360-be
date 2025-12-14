@@ -1,9 +1,11 @@
+// src/pages/user/TransparencyDashboard.tsx
 import React, { useEffect, useState } from "react";
 import UserTransparency from "../../components/UserTransparency";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import UserNavbar from "../../components/UserNavbar";
 import BACKEND_API from "../../utils/API";
+import Button from "../../components/Button";
 
 const TransparencyDashboard = () => {
   const [barangayName, setBarangayName] = useState("");
@@ -19,8 +21,6 @@ const TransparencyDashboard = () => {
         if (currUser) {
           try {
             let url = `${BACKEND_API}/barangays/${currUser.barangayId}`;
-            // let url = `http://localhost:8080/api/barangays/${currUser.barangayId}`;
-
             let response = await axios.get(url);
 
             if (response.data.success === true) {
@@ -56,12 +56,10 @@ const TransparencyDashboard = () => {
               safer and more progressive future.
             </p>
 
-            <div
-              className="flex p-3 rounded-xl bg-green-700 text-white font-normal text-sm mt-6 cursor-pointer"
-              onClick={() => navigate("/user/transparency/updates")}
-            >
+            {/* Reusable Button with hover effect */}
+            <Button onClick={() => navigate("/user/transparency/updates")}>
               View More
-            </div>
+            </Button>
           </div>
         </div>
       </div>

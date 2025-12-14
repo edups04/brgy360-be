@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { useBudget } from "../../providers/BudgetProvider";
 import DeleteModal from "../../components/DeleteModal";
 import Modal from "../../components/Modal";
@@ -9,10 +10,7 @@ import {
   RiDeleteBin4Line,
   RiEditLine,
   RiEmotionUnhappyLine,
-  RiFilePdf2Fill,
   RiFilePdf2Line,
-  RiFilePdfLine,
-  RiSearchLine,
 } from "react-icons/ri";
 import AdminTransparency from "../../components/AdminTransparency";
 import AdminNavbar from "../../components/AdminNavbar";
@@ -20,7 +18,6 @@ import BACKEND_API from "../../utils/API";
 
 const Budget = () => {
   const { budgets, years, getBudgets } = useBudget();
-  const [search, setSearch] = useState("");
   const [year, setYear] = useState("");
   const limit = 10;
   const [barangayId, setBarangayId] = useState("");
@@ -45,8 +42,6 @@ const Budget = () => {
     if (updateId) {
       try {
         let url = `${BACKEND_API}/budgets/${updateId}`;
-        // let url = `http://localhost:8080/api/budgets/${updateId}`;
-
         let response = await axios.delete(url);
 
         if (response.data.success === true) {
@@ -73,8 +68,6 @@ const Budget = () => {
       if (currUser) {
         try {
           let url = `${BACKEND_API}/users/${currUser._id}`;
-          // let url = `http://localhost:8080/api/users/${currUser._id}`;
-
           let response = await axios.get(url);
 
           if (response.data.success === true) {
@@ -118,8 +111,8 @@ const Budget = () => {
                     <div
                       className={`${
                         isActive
-                          ? "p-3 rounded-xl bg-green-700 text-sm font-normal text-white cursor-pointer"
-                          : "p-3 rounded-xl text-sm font-normal cursor-pointer"
+                          ? "p-3 rounded-xl bg-green-700 text-sm font-normal text-white cursor-pointer transition duration-300 ease-in-out hover:bg-green-800 hover:scale-105"
+                          : "p-3 rounded-xl text-sm font-normal cursor-pointer transition duration-300 ease-in-out hover:bg-gray-300 hover:scale-105"
                       }`}
                       key={budgetYear}
                       onClick={() => setYear(value)}
@@ -131,7 +124,7 @@ const Budget = () => {
               </div>
             ) : null}
             <div
-              className="flex items-center justify-center cursor-pointer text-sm font-normal text-white bg-green-700 p-3 rounded-xl"
+              className="flex items-center justify-center cursor-pointer text-sm font-normal text-white bg-green-700 p-3 rounded-xl transition duration-300 ease-in-out hover:bg-green-800 hover:scale-105"
               onClick={() => navigate("/admin/transparency/budgets/add")}
             >
               Add New
@@ -146,16 +139,16 @@ const Budget = () => {
             {budgets.length > 0 ? (
               budgets.map((budget: any) => (
                 <div
-                  className="w-full flex flex-col items-center justify-center p-6 rounded-xl shadow-xl shadow-black/10"
+                  className="w-full flex flex-col items-center justify-center p-6 rounded-xl shadow-xl shadow-black/10 transition duration-300 ease-in-out hover:shadow-green-200"
                   key={budget._id}
                 >
                   <div className="w-full flex-col flex lg:flex-row items-center justify-between">
                     <div className="w-full lg:w-2/3 flex flex-row items-center justify-start gap-2">
-                      <div className="p-3 rounded-full bg-green-700 flex items-center justify-center">
+                      <div className="p-3 rounded-full bg-green-700 flex items-center justify-center transition duration-300 ease-in-out hover:bg-green-800 hover:scale-105">
                         <RiFilePdf2Line size={16} color="white" />
                       </div>
                       <div className="flex flex-col items-start justify-center gap-2">
-                        <p className="line-clamp-1 text-sm font-normal cursor-pointer">
+                        <p className="line-clamp-1 text-sm font-normal cursor-pointer hover:text-green-800 transition duration-200 ease-in-out">
                           {budget.title}
                         </p>
                         <div className="w-full flex flex-row items-center justify-start gap-1">
@@ -170,7 +163,7 @@ const Budget = () => {
                     </div>
                     <div className="w-full lg:w-1/2 flex flex-row items-center justify-end gap-2">
                       <div
-                        className="p-3 rounded-xl bg-green-700 text-white cursor-pointer"
+                        className="p-3 rounded-xl bg-green-700 text-white cursor-pointer transition duration-300 ease-in-out hover:bg-green-800 hover:scale-105"
                         onClick={() =>
                           navigate("/admin/transparency/budgets/edit", {
                             state: budget._id,
@@ -180,7 +173,7 @@ const Budget = () => {
                         <RiEditLine size={16} />
                       </div>
                       <div
-                        className="p-3 rounded-xl bg-red-700 text-white cursor-pointer"
+                        className="p-3 rounded-xl bg-red-700 text-white cursor-pointer transition duration-300 ease-in-out hover:bg-red-800 hover:scale-105"
                         onClick={() => {
                           showDeleteModal(true);
                           setSelectedBudget(budget._id);
@@ -201,29 +194,6 @@ const Budget = () => {
               </div>
             )}
           </div>
-          {/* pagination */}
-          {/* <div className="flex flex-row items-center justify-center space-x-4 py-2">
-            {Array.from({ length: totalPages }, (_, index) => index + 1)
-              .filter(
-                (pageNumber) =>
-                  pageNumber === page ||
-                  pageNumber === page - 1 ||
-                  pageNumber === page + 1
-              )
-              .map((pageNumber) => (
-                <p
-                  key={pageNumber}
-                  className={`cursor-pointer ${
-                    page === pageNumber
-                      ? "font-semibold text-sm text-green-700"
-                      : "font-normal text-sm text-green-700"
-                  }`}
-                  onClick={() => setPage(pageNumber)}
-                >
-                  {pageNumber}
-                </p>
-              ))}
-          </div> */}
         </div>
         <div className="w-full h-[10vh] lg:hidden"></div>
       </div>
