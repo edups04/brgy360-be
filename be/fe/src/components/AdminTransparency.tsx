@@ -19,21 +19,28 @@ const AdminTransparency = () => {
     } else if (location.pathname.includes("/admin/transparency/updates")) {
       setActiveTab("updates");
       document.title = "Project Updates";
-      console.log("shit");
     } else if (location.pathname.includes("/admin/transparency/achievements")) {
       setActiveTab("achievements");
       document.title = "Accomplishment and Achievements";
-      console.log("shit");
     } else if (location.pathname.includes("/admin/transparency")) {
       setActiveTab("transparency");
       document.title = "Transparency Dashboard";
     }
   }, [location.pathname]);
 
+  // Shared classes for inactive tabs with hover effect
+  const inactiveClasses =
+    "flex flex-row gap-2 p-3 rounded-xl bg-gray-200 cursor-pointer transition duration-300 ease-in-out hover:bg-gray-300 hover:scale-105";
+
+  // Shared classes for active tabs
+  const activeClasses =
+    "flex flex-row gap-2 p-3 rounded-xl bg-green-700 text-white cursor-pointer transition duration-300 ease-in-out";
+
   return (
     <div className="w-full sticky top-0 flex items-center justify-start gap-4">
+      {/* Transparency Dashboard */}
       {activeTab === "transparency" ? (
-        <div className="flex flex-row gap-2 p-3 rounded-xl bg-green-700 text-white cursor-pointer">
+        <div className={activeClasses}>
           <RiFundsBoxLine size={16} />
           <p className="hidden lg:block text-sm font-normal">
             Transparency Dashboard
@@ -41,7 +48,7 @@ const AdminTransparency = () => {
         </div>
       ) : (
         <div
-          className="flex flex-row gap-2 p-3 rounded-xl bg-gray-200 cursor-pointer"
+          className={inactiveClasses}
           onClick={() => navigate("/admin/transparency")}
         >
           <RiFundsBoxLine size={16} />
@@ -51,14 +58,15 @@ const AdminTransparency = () => {
         </div>
       )}
 
+      {/* Budgets */}
       {activeTab === "budgets" ? (
-        <div className="flex flex-row gap-2 p-3 rounded-xl bg-green-700 text-white cursor-pointer">
+        <div className={activeClasses}>
           <RiMoneyDollarCircleLine size={16} />
           <p className="hidden lg:block text-sm font-normal">Budget Overview</p>
         </div>
       ) : (
         <div
-          className="flex flex-row gap-2 p-3 bg-gray-200 rounded-xl cursor-pointer"
+          className={inactiveClasses}
           onClick={() => navigate("/admin/transparency/budgets")}
         >
           <RiMoneyDollarCircleLine size={16} />
@@ -66,14 +74,15 @@ const AdminTransparency = () => {
         </div>
       )}
 
+      {/* Updates */}
       {activeTab === "updates" ? (
-        <div className="flex flex-row gap-2 p-3 rounded-xl bg-green-700 text-white cursor-pointer">
+        <div className={activeClasses}>
           <RiFolderChartLine size={16} />
           <p className="hidden lg:block text-sm font-normal">Project Updates</p>
         </div>
       ) : (
         <div
-          className="flex flex-row gap-2 p-3 rounded-xl bg-gray-200 cursor-pointer"
+          className={inactiveClasses}
           onClick={() => navigate("/admin/transparency/updates")}
         >
           <RiFolderChartLine size={16} />
@@ -81,14 +90,15 @@ const AdminTransparency = () => {
         </div>
       )}
 
+      {/* Achievements */}
       {activeTab === "achievements" ? (
-        <div className="flex flex-row gap-2 p-3 rounded-xl bg-green-700 text-white cursor-pointer">
+        <div className={activeClasses}>
           <RiMedalLine size={16} />
           <p className="hidden lg:block text-sm font-normal">Achievements</p>
         </div>
       ) : (
         <div
-          className="flex flex-row gap-2 p-3 rounded-xl bg-gray-200 cursor-pointer"
+          className={inactiveClasses}
           onClick={() => navigate("/admin/transparency/achievements")}
         >
           <RiMedalLine size={16} />
